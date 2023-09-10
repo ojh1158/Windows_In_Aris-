@@ -10,10 +10,12 @@ public class GifManager : MonoBehaviour
     public List<Sprite> spriteList;
 
     public float speed;
-    void Awake()
-    {
-        StartCoroutine(GIF());
-    }
+    
+    
+    // void Awake()
+    // {
+    //     StartCoroutine(GIF());
+    // }
     
     IEnumerator GIF()
     {
@@ -23,7 +25,7 @@ public class GifManager : MonoBehaviour
             {
                 image.sprite = sprite;
                 yield return new WaitForSecondsRealtime(speed);
-            }   
+            }
         }
     }
 }
