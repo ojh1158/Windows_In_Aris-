@@ -86,12 +86,16 @@ public class TransparentApp : MonoBehaviour
         hWnd = GetActiveWindow();
         
         SetWindowLong(hWnd, GWL_EXSTYLE, WS_EX_LAYERED);
-        SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE);
+        // SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE);
         SetLayeredWindowAttributes(hWnd, 0, 255, LWA_ALPHA | LWA_COLORKEY);
         
         BringWindowToTop(hWnd);
         int style = GetWindowLong(hWnd, GWL_STYLE);
         SetWindowLong(hWnd, GWL_STYLE, (style & ~WS_BORDER & ~WS_CAPTION));
+        
+        var pos = Screen.mainWindowDisplayInfo;
+            
+        SetWindowPos(hWnd, HWND_TOPMOST, (int)pos.width / 2, (int)pos.height / 2, 0, 0, SWP_NOSIZE);
         
         
         int hMonitor = MonitorFromWindow(hWnd, 0);
@@ -133,14 +137,26 @@ public class TransparentApp : MonoBehaviour
 
     public void Update()
     {
+        if (GameManager.IsGameMode)
+        {
+            return;
+        }
+        
         int hMonitor = MonitorFromWindow(hWnd, 0);
         MONITORINFO monitorInfo = new MONITORINFO();
         monitorInfo.cbSize = Marshal.SizeOf(typeof(MONITORINFO));
         GetMonitorInfo(hMonitor, ref monitorInfo);
         
-        var pos = GetWindowsPos();
-            
-        SetWindowPos(hWnd, HWND_TOPMOST, (int)pos.x, (int)pos.y, 0, 0, SWP_NOSIZE);
+        // var pos = GetWindowsPos();
+
+        // var pos = Screen.mainWindowDisplayInfo;
+        //     
+        // SetWindowPos(hWnd, HWND_TOPMOST, (int)pos.width - pos.width / 2, (int)pos.height / 2, 0, 0, SWP_NOSIZE);
+
+        var get = GetWindowsPos();
+        
+        DebugUi.Debug = get.x + "+" + get.y;
+        
         BringWindowToTop(hWnd);
         int style = GetWindowLong(hWnd, GWL_STYLE);
         SetWindowLong(hWnd, GWL_STYLE, (style & ~WS_BORDER & ~WS_CAPTION));
