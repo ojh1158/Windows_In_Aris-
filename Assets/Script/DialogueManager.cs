@@ -38,7 +38,7 @@ public class DialogueManager : MonoBehaviour
     public IEnumerator Dialogue(string get_text)
     {
         var text = "";
-        var maxWidth = Screen.width - 60;
+        var maxWidth = 140;
         
         float fix = 0;
         

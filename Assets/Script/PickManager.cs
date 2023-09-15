@@ -5,27 +5,18 @@ using UnityEngine;
 
 public class PickManager : MonoBehaviour
 {
-    // public void Pick()
-    // {
-    //     Debug.Log("VAR");
-    //     if (Input.GetMouseButtonDown(0))
-    //     {
-    //         Debug.Log("in");
-    //
-    //         if (Application.isEditor)
-    //         {
-    //             return;
-    //         }
-    //         TransparentApp.Pick();
-    //     }
-    // }
+    public static PickManager In;
+    public RectTransform pickRectTransform;
+
+    private void Awake()
+    {
+        In = this;
+    }
 
     public void Update()
     {
         if (Input.GetMouseButton(0))
         {
-            Debug.Log("in");
-
             if (Application.isEditor)
             {
                 return;

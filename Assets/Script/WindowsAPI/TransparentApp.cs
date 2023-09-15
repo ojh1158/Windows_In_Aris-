@@ -77,32 +77,36 @@ public class TransparentApp : MonoBehaviour
         public int y;
     }
     
+
     void Awake()
     {
         API = this;
-        
+        if (Application.isEditor) return;
+#if UNITY_STANDALONE_WIN
         Screen.SetResolution(200,400,false);
         
         hWnd = GetActiveWindow();
         
         SetWindowLong(hWnd, GWL_EXSTYLE, WS_EX_LAYERED);
-        // SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE);
-        SetLayeredWindowAttributes(hWnd, 0, 255, LWA_ALPHA | LWA_COLORKEY);
+        SetLayeredWindowAttributes(hWnd, 0x000300, 255, LWA_ALPHA | LWA_COLORKEY);
         
         BringWindowToTop(hWnd);
         int style = GetWindowLong(hWnd, GWL_STYLE);
         SetWindowLong(hWnd, GWL_STYLE, (style & ~WS_BORDER & ~WS_CAPTION));
         
         var pos = Screen.mainWindowDisplayInfo;
-            
-        SetWindowPos(hWnd, HWND_TOPMOST, (int)pos.width / 2, (int)pos.height / 2, 0, 0, SWP_NOSIZE);
+        
+        Move(pos.width / 2, pos.height / 2);
         
         
         int hMonitor = MonitorFromWindow(hWnd, 0);
-        MONITORINFO monitorInfo = new MONITORINFO();
-        monitorInfo.cbSize = Marshal.SizeOf(typeof(MONITORINFO));
+        MONITORINFO monitorInfo = new MONITORINFO(); monitorInfo.cbSize = Marshal.SizeOf(typeof(MONITORINFO));
         GetMonitorInfo(hMonitor, ref monitorInfo);
+
+        // MoveWindowToBottomRight();
+#endif
     }
+    
     
     [StructLayout(LayoutKind.Sequential)]
     public struct RECT
@@ -135,70 +139,92 @@ public class TransparentApp : MonoBehaviour
         throw new NullReferenceException();
     }
 
+
     public void Update()
     {
+        if (Application.isEditor) return;
         if (GameManager.IsGameMode)
         {
             return;
         }
-        
+#if UNITY_STANDALONE_WIN
         int hMonitor = MonitorFromWindow(hWnd, 0);
         MONITORINFO monitorInfo = new MONITORINFO();
         monitorInfo.cbSize = Marshal.SizeOf(typeof(MONITORINFO));
         GetMonitorInfo(hMonitor, ref monitorInfo);
         
-        // var pos = GetWindowsPos();
-
-        // var pos = Screen.mainWindowDisplayInfo;
-        //     
-        // SetWindowPos(hWnd, HWND_TOPMOST, (int)pos.width - pos.width / 2, (int)pos.height / 2, 0, 0, SWP_NOSIZE);
 
         var get = GetWindowsPos();
         
-        DebugUi.Debug = get.x + "+" + get.y;
+        // DebugUi.Debug = get.x + "+" + get.y;
         
         BringWindowToTop(hWnd);
         int style = GetWindowLong(hWnd, GWL_STYLE);
         SetWindowLong(hWnd, GWL_STYLE, (style & ~WS_BORDER & ~WS_CAPTION));
+#endif
+    }
+    public void MoveWindowToBottomRight()
+    {
+        // // 화면의 해상도 얻기 (Unity)
+        // int screenWidth = Screen.currentResolution.width;
+        // int screenHeight = Screen.currentResolution.height;
+        //
+        // // 게임 창의 현재 크기와 위치 얻기
+        // RECT rect;
+        // if (GetWindowRect((IntPtr)hWnd, out rect))
+        // {
+        //     // 게임 창의 크기 계산
+        //     int windowWidth = rect.Right - rect.Left;
+        //     int windowHeight = rect.Bottom - rect.Top;
+        //
+        //     // 게임 창이 오른쪽 아래에 오도록 위치 계산
+        //     int newX = screenWidth - windowWidth;
+        //     int newY = screenHeight - windowHeight;
+        //
+        //     // 게임 창을 새 위치로 이동
+        //     Move(newX, newY);
+        // }
     }
 
     public void Move(int newX, int newY)
     {
-        // int hMonitor = MonitorFromWindow(hWnd, 0);
-        // MONITORINFO monitorInfo = new MONITORINFO();
-        // monitorInfo.cbSize = Marshal.SizeOf(typeof(MONITORINFO));
-        // GetMonitorInfo(hMonitor, ref monitorInfo);
-            
-        // 현재 게임 창의 크기
-        // int windowWidth = Screen.width;
-        // int windowHeight = Screen.height;
-        
+#if UNITY_STANDALONE_WIN
+        if (Application.isEditor) return;
         SetWindowPos(hWnd, HWND_TOPMOST, newX, newY, 0, 0, SWP_NOSIZE);
+#endif
     }
 
     public void Pick()
     {
+        if (Application.isEditor) return;
         POINT p;
         
         if (GetCursorPos(out p))
         {
+#if UNITY_STANDALONE_WIN
             int hMonitor = MonitorFromWindow(hWnd, 0);
             MONITORINFO monitorInfo = new MONITORINFO();
             monitorInfo.cbSize = Marshal.SizeOf(typeof(MONITORINFO));
             GetMonitorInfo(hMonitor, ref monitorInfo);
             
-            // // 현재 게임 창의 크기
-            // int windowWidth = Screen.width;
-            // int windowHeight = Screen.height;
-            //
-            // // 게임 창을 마우스 위치에 중앙으로 옮기기
-            // int newX = p.x - windowWidth / 2;
-            // int newY = p.y - windowHeight / 2;
-
-            var pos = GetWindowsPos();
+            // 현재 게임 창의 크기
+            int windowWidth = Screen.width;
+            int windowHeight = Screen.height;
             
-            Move((int)pos.x ,(int)pos.y + 50);
+            // 게임 창을 마우스 위치에 중앙으로 옮기기
+            int newX = p.x - windowWidth / 2;
+            int newY = p.y - windowHeight / 2;
+
+            // var pos = GetWindowsPos();
+
+            DebugUi.Debug = $"{newX} / {newY}";
+
+            var pos = PickManager.In.pickRectTransform.localPosition;
+            //
+            Move(newX + (int)pos.x,newY + (int)pos.y);
+#endif
         }        
     }
+    
 }
 
