@@ -96,14 +96,14 @@ public class TransparentApp : MonoBehaviour
         
         var pos = Screen.mainWindowDisplayInfo;
         
-        Move(pos.width / 2, pos.height / 2);
+        // Move(pos.width / 2, pos.height / 2);
         
         
         int hMonitor = MonitorFromWindow(hWnd, 0);
         MONITORINFO monitorInfo = new MONITORINFO(); monitorInfo.cbSize = Marshal.SizeOf(typeof(MONITORINFO));
         GetMonitorInfo(hMonitor, ref monitorInfo);
 
-        // MoveWindowToBottomRight();
+        MoveWindowToBottomRight();
 #endif
     }
     
@@ -118,22 +118,17 @@ public class TransparentApp : MonoBehaviour
     static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
     [DllImport("user32.dll", SetLastError = true)]
-    static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+    static extern bool GetWindowRect(int hWnd, out RECT lpRect);
 
     public static Vector2 GetWindowsPos()
     {
-        IntPtr findWindow = FindWindow(null, "Aris");  // 대상 윈도우의 타이틀을 입력하세요.
-
-        if (findWindow != IntPtr.Zero)
+        RECT Rect;
+        if (GetWindowRect(hWnd, out Rect))
         {
-            RECT Rect;
-            if (GetWindowRect(findWindow, out Rect))
-            {
-                int width = Rect.Right - Rect.Left;
-                int height = Rect.Bottom - Rect.Top;
-                
-                return new Vector2(width, height);
-            }
+            int width = Rect.Right - Rect.Left;
+            int height = Rect.Bottom - Rect.Top;
+
+            return new Vector2(width, height);
         }
 
         throw new NullReferenceException();
@@ -165,31 +160,41 @@ public class TransparentApp : MonoBehaviour
     }
     public void MoveWindowToBottomRight()
     {
-        // // 화면의 해상도 얻기 (Unity)
-        // int screenWidth = Screen.currentResolution.width;
-        // int screenHeight = Screen.currentResolution.height;
-        //
-        // // 게임 창의 현재 크기와 위치 얻기
-        // RECT rect;
-        // if (GetWindowRect((IntPtr)hWnd, out rect))
-        // {
-        //     // 게임 창의 크기 계산
-        //     int windowWidth = rect.Right - rect.Left;
-        //     int windowHeight = rect.Bottom - rect.Top;
-        //
-        //     // 게임 창이 오른쪽 아래에 오도록 위치 계산
-        //     int newX = screenWidth - windowWidth;
-        //     int newY = screenHeight - windowHeight;
-        //
-        //     // 게임 창을 새 위치로 이동
-        //     Move(newX, newY);
-        // }
+        int screenWidth = Screen.currentResolution.width;
+        int screenHeight = Screen.currentResolution.height;
+        RECT rect;
+        if (GetWindowRect(hWnd, out rect))
+        {
+           
+            int windowWidth = rect.Right - rect.Left;
+            int windowHeight = rect.Bottom - rect.Top;
+        
+            
+            int newX = screenWidth - windowWidth;
+            int newY = screenHeight - windowHeight;
+        
+            Move(newX, newY);
+        }
     }
 
     public void Move(int newX, int newY)
     {
 #if UNITY_STANDALONE_WIN
         if (Application.isEditor) return;
+
+        if (GetWindowRect(hWnd, out var rect))
+        {
+            DebugUi.Debug = $"left {rect.Left}\nright {rect.Right}\ntop {rect.Top}\nbottom {rect.Bottom}\n";
+            //DebugUi.Debug = $"{Screen.mainWindowDisplayInfo.width}";
+            if (newX >= Screen.mainWindowDisplayInfo.width - Screen.width)
+            {
+                newX = Screen.mainWindowDisplayInfo.width - Screen.width;
+            }
+            if (newX <= 0)
+            {
+                newX = 0;
+            }
+        }
         SetWindowPos(hWnd, HWND_TOPMOST, newX, newY, 0, 0, SWP_NOSIZE);
 #endif
     }
@@ -216,8 +221,6 @@ public class TransparentApp : MonoBehaviour
             int newY = p.y - windowHeight / 2;
 
             // var pos = GetWindowsPos();
-
-            DebugUi.Debug = $"{newX} / {newY}";
 
             var pos = PickManager.In.pickRectTransform.localPosition;
             //

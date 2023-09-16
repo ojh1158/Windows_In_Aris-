@@ -282,7 +282,7 @@ GameObject:
   - component: {fileID: 361851896}
   - component: {fileID: 361851898}
   - component: {fileID: 361851897}
-  - component: {fileID: 361851899}
+  - component: {fileID: 361851900}
   m_Layer: 5
   m_Name: halo
   m_TagString: Untagged
@@ -348,22 +348,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 361851895}
   m_CullTransparentMesh: 1
---- !u!114 &361851899
-MonoBehaviour:
+--- !u!111 &361851900
+Animation:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 361851895}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ff545779c46c5d4196531848b0192c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  arisRectTransform: {fileID: 0}
-  haloRectTransform: {fileID: 361851896}
-  speed: 1
-  move: 5
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 68467d1869b085246911fb05da7ebbfa, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 68467d1869b085246911fb05da7ebbfa, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &374388325
 GameObject:
   m_ObjectHideFlags: 0
@@ -629,7 +629,6 @@ GameObject:
   m_Component:
   - component: {fileID: 836276553}
   - component: {fileID: 836276554}
-  - component: {fileID: 836276556}
   m_Layer: 0
   m_Name: WinAPIManager
   m_TagString: Untagged
@@ -662,18 +661,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c414f0d405bacd9418b3ea8e9177e395, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &836276556
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 836276551}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 978d514c04ced9848981b5070b3216e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &844983402
@@ -1318,7 +1305,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1781640486
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1334,10 +1321,10 @@ RectTransform:
   m_Father: {fileID: 1150566594}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1781640487
 MonoBehaviour:
