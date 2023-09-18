@@ -83,7 +83,7 @@ public class TransparentApp : MonoBehaviour
         API = this;
         if (Application.isEditor) return;
 #if UNITY_STANDALONE_WIN
-        Screen.SetResolution(200,400,false);
+        Screen.SetResolution(200,250,false);
         
         hWnd = GetActiveWindow();
         
@@ -143,15 +143,10 @@ public class TransparentApp : MonoBehaviour
             return;
         }
 #if UNITY_STANDALONE_WIN
-        int hMonitor = MonitorFromWindow(hWnd, 0);
-        MONITORINFO monitorInfo = new MONITORINFO();
-        monitorInfo.cbSize = Marshal.SizeOf(typeof(MONITORINFO));
-        GetMonitorInfo(hMonitor, ref monitorInfo);
-        
-
-        var get = GetWindowsPos();
-        
-        // DebugUi.Debug = get.x + "+" + get.y;
+        // int hMonitor = MonitorFromWindow(hWnd, 0);
+        // MONITORINFO monitorInfo = new MONITORINFO();
+        // monitorInfo.cbSize = Marshal.SizeOf(typeof(MONITORINFO));
+        // GetMonitorInfo(hMonitor, ref monitorInfo);
         
         BringWindowToTop(hWnd);
         int style = GetWindowLong(hWnd, GWL_STYLE);
@@ -168,7 +163,6 @@ public class TransparentApp : MonoBehaviour
            
             int windowWidth = rect.Right - rect.Left;
             int windowHeight = rect.Bottom - rect.Top;
-        
             
             int newX = screenWidth - windowWidth;
             int newY = screenHeight - windowHeight;
@@ -176,27 +170,96 @@ public class TransparentApp : MonoBehaviour
             Move(newX, newY);
         }
     }
+    
+    public static RECT GetTaskbarRect()
+    {
+        IntPtr taskbarHandle = FindWindow("Shell_TrayWnd", null);
+        
+        if (taskbarHandle == IntPtr.Zero)
+        {
+            return default;
+        }
+
+        RECT rect;
+        
+        if (!GetWindowRect((int)taskbarHandle, out rect))
+        {
+            return default;
+        }
+        return rect;
+    }
+
+    public static RECT GetRect()
+    {
+        if (GetWindowRect(hWnd, out var rect))
+        {
+            return rect;
+        }
+        return default;
+    }
+
+    public static Vector2 GetLeftUpVector2()
+    {
+        if (GetWindowRect(hWnd, out var rect))
+        {
+            return new Vector2(rect.Left, rect.Top);
+        }
+
+        return default;
+    }
+
 
     public void Move(int newX, int newY)
     {
 #if UNITY_STANDALONE_WIN
         if (Application.isEditor) return;
-
-        if (GetWindowRect(hWnd, out var rect))
-        {
-            DebugUi.Debug = $"left {rect.Left}\nright {rect.Right}\ntop {rect.Top}\nbottom {rect.Bottom}\n";
-            //DebugUi.Debug = $"{Screen.mainWindowDisplayInfo.width}";
-            if (newX >= Screen.mainWindowDisplayInfo.width - Screen.width)
-            {
-                newX = Screen.mainWindowDisplayInfo.width - Screen.width;
-            }
-            if (newX <= 0)
-            {
-                newX = 0;
-            }
-        }
+        
+        GetSafePos(newX, newY, out newX, out newY);
+        
         SetWindowPos(hWnd, HWND_TOPMOST, newX, newY, 0, 0, SWP_NOSIZE);
 #endif
+    }
+
+    private static void GetSafePos(int oldX , int oldY ,out int newX, out int newY)
+    {
+        if (oldX >= Screen.mainWindowDisplayInfo.width - Screen.width)
+        {
+            oldX = Screen.mainWindowDisplayInfo.width - Screen.width;
+        }
+        if (oldX <= 0)
+        {
+            oldX = 0;
+        }
+
+        if (oldY >= Screen.mainWindowDisplayInfo.height)
+        {
+            oldY = Screen.mainWindowDisplayInfo.height;
+        }
+            
+        // 윈도우 작업 표시줄 불러오기
+        var top = GetTaskbarRect().Top;
+            
+        if (oldY > top - Screen.height)
+        {
+            oldY = top - Screen.height;
+        }
+
+        if (oldY < 0)
+        {
+            oldY = 0;
+        }
+
+        newX = oldX;
+        newY = oldY;
+    }
+
+    public static bool IsGround()
+    {
+        if (GetWindowRect(hWnd, out var rect))
+        {
+            return rect.Bottom >= GetTaskbarRect().Top;
+        }
+        return false;
     }
 
     public void Pick()
@@ -207,10 +270,10 @@ public class TransparentApp : MonoBehaviour
         if (GetCursorPos(out p))
         {
 #if UNITY_STANDALONE_WIN
-            int hMonitor = MonitorFromWindow(hWnd, 0);
-            MONITORINFO monitorInfo = new MONITORINFO();
-            monitorInfo.cbSize = Marshal.SizeOf(typeof(MONITORINFO));
-            GetMonitorInfo(hMonitor, ref monitorInfo);
+            // int hMonitor = MonitorFromWindow(hWnd, 0);
+            // MONITORINFO monitorInfo = new MONITORINFO();
+            // monitorInfo.cbSize = Marshal.SizeOf(typeof(MONITORINFO));
+            // var t = GetMonitorInfo(hMonitor, ref monitorInfo);
             
             // 현재 게임 창의 크기
             int windowWidth = Screen.width;
@@ -220,11 +283,9 @@ public class TransparentApp : MonoBehaviour
             int newX = p.x - windowWidth / 2;
             int newY = p.y - windowHeight / 2;
 
-            // var pos = GetWindowsPos();
-
-            var pos = PickManager.In.pickRectTransform.localPosition;
-            //
-            Move(newX + (int)pos.x,newY + (int)pos.y);
+            var pos = MoveManager.In.pickRectTransform.localPosition;
+            
+            Move(newX - (int)pos.x,newY + (int)pos.y);
 #endif
         }        
     }
