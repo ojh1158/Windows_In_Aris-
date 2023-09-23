@@ -9,7 +9,7 @@ namespace Script.Data
     public enum ScheduleType
     {
         Idle = 0,
-        Working = 1,
+        Walking = 1,
         Run = 2
     }
 
@@ -31,16 +31,28 @@ namespace Script.Data
         private static Dictionary<ScheduleType, IEnumerator> scheduleDictionary = new()
         {
             {ScheduleType.Idle , Idle()},
+            {ScheduleType.Walking , Walking()},
+            { ScheduleType.Run, Run()}
         };
 
-        public static void StartSchedule(ScheduleType scheduleType)
+        public static IEnumerator StartSchedule(ScheduleType scheduleType)
         {
-            scheduleDictionary.GetValueOrDefault(scheduleType);
+            return scheduleDictionary.GetValueOrDefault(scheduleType);
         }
         
         private static IEnumerator Idle()
         {
             //DialogueManager.Instance.Dialogue();
+            yield break;
+        }
+
+        private static IEnumerator Walking()
+        {
+            yield break;
+        }
+
+        private static IEnumerator Run()
+        {
             yield break;
         }
         

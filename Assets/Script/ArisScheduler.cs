@@ -9,6 +9,8 @@ using Random = UnityEngine.Random;
 public class ArisScheduler : MonoBehaviour
 {
     public List<SchedulerData> schedulerDataList;
+
+    private Coroutine schedule;
     private void Awake()
     {
         StartCoroutine(Scheduler());
@@ -26,6 +28,7 @@ public class ArisScheduler : MonoBehaviour
     private IEnumerator RunSchedule()
     {
         var scheduleType = (ScheduleType)Random.Range(0, Enum.GetValues(typeof(ScheduleType)).Length);
+        yield return schedule = StartCoroutine(Schedule.StartSchedule(scheduleType));
         yield return new WaitForSeconds(Random.Range(5f, 10f));
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Script.Data;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -109,6 +110,7 @@ public class TransparentApp : MonoBehaviour
     
     
     [StructLayout(LayoutKind.Sequential)]
+    [Serializable]
     public struct RECT
     {
         public int Left, Top, Right, Bottom;
@@ -180,9 +182,7 @@ public class TransparentApp : MonoBehaviour
             return default;
         }
 
-        RECT rect;
-        
-        if (!GetWindowRect((int)taskbarHandle, out rect))
+        if (!GetWindowRect((int)taskbarHandle, out var rect) || rect.Top < Screen.mainWindowDisplayInfo.height / 2)
         {
             return default;
         }
@@ -239,16 +239,22 @@ public class TransparentApp : MonoBehaviour
         // 윈도우 작업 표시줄 불러오기
         var top = GetTaskbarRect().Top;
             
-        if (oldY > top - Screen.height)
+        DebugUi.Debug = $"{top}";
+        if (top != 0 && oldY > top - Screen.height)
         {
-            oldY = top - Screen.height;
+           oldY = top - Screen.height;
+        }
+
+        if (oldY >= Screen.mainWindowDisplayInfo.height - Screen.height)
+        {
+            oldY = Screen.mainWindowDisplayInfo.height - Screen.height;
         }
 
         if (oldY < 0)
         {
             oldY = 0;
         }
-
+        
         newX = oldX;
         newY = oldY;
     }
