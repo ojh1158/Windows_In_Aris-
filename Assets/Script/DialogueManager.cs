@@ -8,6 +8,8 @@ using UnityEngine;
 
 public class DialogueManager : MonoBehaviour
 {
+    public static DialogueManager Instance;
+    
     [Range(0.01f,0.2f)]
     public float dialogueSpeed;
 
@@ -18,12 +20,17 @@ public class DialogueManager : MonoBehaviour
     
     public List<DialogueData> dialogueDataList;
 
-    public void Start()
+    public void Awake()
     {
-        StartCoroutine(MemoReal());
+        Instance = this;
     }
 
-    public IEnumerator MemoReal()
+    public void Start()
+    {
+        //StartCoroutine(MemoReal());
+    }
+
+    private IEnumerator MemoReal()
     {
         var memoReal = dialogueDataList.Find(data => data.dialogueType == DialogueType.Other);
         
@@ -33,6 +40,11 @@ public class DialogueManager : MonoBehaviour
         }
         
         StartCoroutine(MemoReal());
+    }
+
+    public DialogueData GetDialogueDataOfType(DialogueType dialogueType)
+    {
+        return dialogueDataList.Find(data => data.dialogueType == dialogueType);
     }
 
     public IEnumerator Dialogue(string get_text)
