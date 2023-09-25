@@ -28,14 +28,21 @@ namespace Script.Data
 
     public static class Schedule
     {
+        private static List<SchedulerData> _schedulerDataList;
+        
         private static Dictionary<ScheduleType, IEnumerator> scheduleDictionary = new()
         {
-            {ScheduleType.Idle , Idle()},
-            {ScheduleType.Walking , Walking()},
-            { ScheduleType.Run, Run()}
+            { ScheduleType.Idle, Idle() },
+            { ScheduleType.Walking, Walking() },
+            { ScheduleType.Run, Run() }
         };
 
-        public static IEnumerator StartSchedule(ScheduleType scheduleType)
+        public static void SetSchedulerData(List<SchedulerData> schedulerDataList)
+        {
+            _schedulerDataList = schedulerDataList;
+        }
+
+        public static IEnumerator GetSchedule(ScheduleType scheduleType)
         {
             return scheduleDictionary.GetValueOrDefault(scheduleType);
         }
