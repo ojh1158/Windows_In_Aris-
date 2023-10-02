@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Script.Data;
 using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -42,12 +43,27 @@ public class DialogueManager : MonoBehaviour
         StartCoroutine(MemoReal());
     }
 
-    public DialogueData GetDialogueDataOfType(DialogueType dialogueType)
+    private DialogueData GetDialogueDataOfType(DialogueType dialogueType)
     {
         return dialogueDataList.Find(data => data.dialogueType == dialogueType);
     }
 
-    public IEnumerator Dialogue(string get_text)
+    private Coroutine _dialogueCoroutine;
+    
+    public void StartRandomWithType(DialogueType dialogueType)
+    {
+        if (_dialogueCoroutine != null)
+        {
+            StopCoroutine(Dialogue(""));
+            _dialogueCoroutine = null;
+        }
+        
+        var dialogueData = GetDialogueDataOfType(dialogueType);
+        var text = dialogueData.text[Random.Range(0, dialogueData.text.Count)];
+        _dialogueCoroutine = StartCoroutine(Dialogue(text));
+    }
+
+    private IEnumerator Dialogue(string get_text)
     {
         var text = "";
         var maxWidth = 140;
@@ -82,6 +98,8 @@ public class DialogueManager : MonoBehaviour
             
             text += get_text[i];
             dialogueText.text = text;
+
+            _dialogueCoroutine = null;
         }
         
         yield return new WaitForSeconds(1.5f);

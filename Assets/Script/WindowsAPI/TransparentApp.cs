@@ -122,17 +122,14 @@ public class TransparentApp : MonoBehaviour
     [DllImport("user32.dll", SetLastError = true)]
     static extern bool GetWindowRect(int hWnd, out RECT lpRect);
 
-    public static Vector2 GetWindowsPos()
+    public static (int x, int y) GetWindowsPos()
     {
-        RECT Rect;
-        if (GetWindowRect(hWnd, out Rect))
+        if (GetWindowRect(hWnd, out var rect))
         {
-            int width = Rect.Right - Rect.Left;
-            int height = Rect.Bottom - Rect.Top;
-
-            return new Vector2(width, height);
+            // int width = Rect.Right - Rect.Left;
+            // int height = Rect.Bottom - Rect.Top;
+            return (rect.Left, rect.Top);
         }
-
         throw new NullReferenceException();
     }
 
@@ -239,13 +236,13 @@ public class TransparentApp : MonoBehaviour
         // 윈도우 작업 표시줄 불러오기
         var top = GetTaskbarRect().Top;
             
-        DebugUi.Debug = $"{top}";
-        if (top != 0 && oldY > top - Screen.height)
+        // DebugUi.Debug = $"{top}";
+        if (oldY > top - Screen.height)
         {
            oldY = top - Screen.height;
         }
 
-        if (oldY >= Screen.mainWindowDisplayInfo.height - Screen.height)
+        if (top == 0 && oldY >= Screen.mainWindowDisplayInfo.height - Screen.height)
         {
             oldY = Screen.mainWindowDisplayInfo.height - Screen.height;
         }
