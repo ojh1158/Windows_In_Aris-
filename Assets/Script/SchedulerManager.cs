@@ -24,26 +24,32 @@ public class SchedulerManager : MonoBehaviour
     {
         Instance = this;
         Schedule.SetSchedulerData(schedulerDataList);
-        StartCoroutine(Scheduler());
+        StartCoroutine(RunSchedule());
     }
 
-    public void StartScheduler(ScheduleType scheduleType)
-    {
-        StopCoroutine(_schedule == null ? Scheduler() : RunSchedule());
-        _schedule = Schedule.StartSchedule(scheduleType);
-    }
+    // public void StartScheduler(ScheduleType scheduleType)
+    // {
+    //     StopCoroutine(_schedule == null ? Scheduler() : RunSchedule());
+    //     _schedule = StartCoroutine(Schedule.StartSchedule(scheduleType));
+    // }
 
-    private IEnumerator Scheduler()
-    {
-        DebugUi.Debug = "StartWait";
-        yield return StartCoroutine(RunSchedule());
-    }
+    // private IEnumerator Scheduler()
+    // {
+    //     DebugUi.Debug = "StartWait";
+    //     StartCoroutine(RunSchedule());
+    //     yield break;
+    // }
 
     private IEnumerator RunSchedule()
     {
+        // DebugUi.Debug = "pick";
         var scheduleType = (ScheduleType)Random.Range(0, Enum.GetValues(typeof(ScheduleType)).Length);
-        yield return _schedule = Schedule.StartSchedule(scheduleType);
+        DebugUi.Debug = scheduleType.ToString();
+        _schedule = StartCoroutine(Schedule.StartSchedule(scheduleType));
+        yield return _schedule; 
+        StopCoroutine(_schedule);
         _schedule = null;
-        StartCoroutine(Scheduler());
+        // DebugUi.Debug = "ScheduleOk";
+        StartCoroutine(RunSchedule());
     }
 }

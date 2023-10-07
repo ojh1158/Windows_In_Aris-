@@ -26,18 +26,17 @@ namespace Script.Data
             return (maxTime, minTime);
         }
     }
-
+    
     public static class Schedule
     {
         private static List<SchedulerData> _schedulerDataList;
         private static List<DialogueData> _dialogueDataList;
         
-        private static Dictionary<ScheduleType, IEnumerator> scheduleDictionary = new()
+        private static readonly List<(ScheduleType scheduleType, IEnumerator iEnumerator)> scheduleList = new ()
         {
-            { ScheduleType.Idle, Idle() },
-            { ScheduleType.Walking, Walking() },
-            { ScheduleType.Run, Run() },
-            
+            ( ScheduleType.Idle, Idle()),
+            ( ScheduleType.Walking, Walking()), 
+            ( ScheduleType.Run, Run()),
         };
 
         public static void SetSchedulerData(List<SchedulerData> schedulerDataList)
@@ -47,14 +46,13 @@ namespace Script.Data
             _dialogueDataList.RemoveAll(data => data.dialogueType == DialogueType.MemoReal);
         }
 
-        public static Coroutine StartSchedule(ScheduleType scheduleType)
-        {
-            return SchedulerManager.Instance.StartCoroutine(scheduleDictionary.GetValueOrDefault(scheduleType));
+        public static IEnumerator StartSchedule(ScheduleType scheduleType)
+        { 
+            return scheduleList.Find(data => data.scheduleType == scheduleType).iEnumerator;
         }
         
         private static IEnumerator Idle()
         {
-            DebugUi.Debug = "Idle";
             DialogueManager.Instance.StartRandomWithType(_dialogueDataList[Random.Range(0, _dialogueDataList.Count)].dialogueType);
             SchedulerManager.Instance.animator.Play("idle");
             yield return new WaitForSeconds(Random.Range(5f, 10f));
@@ -68,7 +66,6 @@ namespace Script.Data
 
         private static IEnumerator Walking()
         {
-            DebugUi.Debug = "Walking";
             (int x, int y) movePos = new();
             var move = MoveData[Random.Range(0, MoveData.Count)];
 
@@ -89,8 +86,7 @@ namespace Script.Data
 
         private static IEnumerator Run()
         {
-            DebugUi.Debug = "Run";
-            yield break;
+            yield return new WaitForSeconds(Random.Range(5f, 10f));
         }
         
     }
