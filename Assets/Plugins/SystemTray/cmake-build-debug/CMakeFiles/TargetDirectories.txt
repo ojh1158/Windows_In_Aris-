@@ -1,0 +1,3 @@
+C:/Users/ojh11/Desktop/Windows_In_Aris-/Assets/Plugins/SystemTray/cmake-build-debug/CMakeFiles/SystemTray.dir
+C:/Users/ojh11/Desktop/Windows_In_Aris-/Assets/Plugins/SystemTray/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/ojh11/Desktop/Windows_In_Aris-/Assets/Plugins/SystemTray/cmake-build-debug/CMakeFiles/rebuild_cache.dir

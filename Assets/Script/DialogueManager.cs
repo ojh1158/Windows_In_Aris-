@@ -50,7 +50,7 @@ public class DialogueManager : MonoBehaviour
 
     private Coroutine _dialogueCoroutine;
     
-    public void StartRandomWithType(DialogueType dialogueType)
+    public IEnumerator StartRandomWithType(DialogueType dialogueType)
     {
         if (_dialogueCoroutine != null)
         {
@@ -60,51 +60,47 @@ public class DialogueManager : MonoBehaviour
         
         var dialogueData = GetDialogueDataOfType(dialogueType);
         var text = dialogueData.text[Random.Range(0, dialogueData.text.Count)];
-        _dialogueCoroutine = StartCoroutine(Dialogue(text));
+        yield return _dialogueCoroutine = StartCoroutine(Dialogue(text));
     }
 
     private IEnumerator Dialogue(string get_text)
     {
-        var text = "";
-        var maxWidth = 140;
-        
-        float fix = 0;
-        
-        for (var i = 0; i < get_text.Length; i++)
+        // var text = "";
+        var maxWidth = Screen.width - 10;
+
+        var fix = false;
+        foreach (var c in get_text)
         {
             dialogueText.text += "_";
             
-            Vector2 preferredValues = dialogueText.GetPreferredValues();
+            var preferredValues = dialogueText.GetPreferredValues();
 
-            float width = preferredValues.x;
-            float height = preferredValues.y;
-
-            if (fix != 0)
-            {
-                width = fix;
-            }
+            var width = preferredValues.x + 10;
+            var height = preferredValues.y;
             
-            if (fix == 0 && maxWidth < preferredValues.x + 20)
+            if (!fix && maxWidth  < preferredValues.x)
             {
-                fix = maxWidth;
+                fix = true;
+            }
+
+            if (fix)
+            {
+                height += 10;
                 width = maxWidth;
             }
             
-            dialogueRect.sizeDelta = new Vector2(width + 30, height + 10);
-            
-            dialogueText.text = dialogueText.text.PadLeft(1);
+            dialogueRect.sizeDelta = new Vector2(width, height);
             
             yield return new WaitForSeconds(dialogueSpeed);
-            
-            text += get_text[i];
-            dialogueText.text = text;
 
-            _dialogueCoroutine = null;
+            dialogueText.text = dialogueText.text[..^1];
+            dialogueText.text += c;
         }
         
         yield return new WaitForSeconds(1.5f);
         
         dialogueText.text = "";
         dialogueRect.sizeDelta = new Vector2(0, 0);
+        _dialogueCoroutine = null;
     }
 }

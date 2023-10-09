@@ -12,44 +12,39 @@ public class SchedulerManager : MonoBehaviour
     
     [Header("Animator")]
     public Animator animator;
+    public Animator eyesClose;
     
     [Header("Data")]
     public List<SchedulerData> schedulerDataList;
 
     private Coroutine _schedule;
-    
-    
+
+    private Schedule schedule = new();
     
     private void Awake()
     {
         Instance = this;
-        Schedule.SetSchedulerData(schedulerDataList);
+        schedule.SetSchedulerData(schedulerDataList);
         StartCoroutine(RunSchedule());
     }
 
-    // public void StartScheduler(ScheduleType scheduleType)
-    // {
-    //     StopCoroutine(_schedule == null ? Scheduler() : RunSchedule());
-    //     _schedule = StartCoroutine(Schedule.StartSchedule(scheduleType));
-    // }
-
-    // private IEnumerator Scheduler()
-    // {
-    //     DebugUi.Debug = "StartWait";
-    //     StartCoroutine(RunSchedule());
-    //     yield break;
-    // }
+    public void StartScheduler(ScheduleType scheduleType)
+    {
+        StopCoroutine(_schedule);
+        _schedule = StartCoroutine(schedule.StartSchedule(scheduleType));
+        
+    }
 
     private IEnumerator RunSchedule()
     {
-        // DebugUi.Debug = "pick";
-        var scheduleType = (ScheduleType)Random.Range(0, Enum.GetValues(typeof(ScheduleType)).Length);
-        DebugUi.Debug = scheduleType.ToString();
-        _schedule = StartCoroutine(Schedule.StartSchedule(scheduleType));
-        yield return _schedule; 
-        StopCoroutine(_schedule);
-        _schedule = null;
-        // DebugUi.Debug = "ScheduleOk";
-        StartCoroutine(RunSchedule());
+        while (true)
+        {
+            var scheduleType = (ScheduleType)Random.Range(0, Enum.GetValues(typeof(ScheduleType)).Length);
+            _schedule = StartCoroutine(schedule.StartSchedule(scheduleType));
+            yield return _schedule;
+            _schedule = null;
+
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 }

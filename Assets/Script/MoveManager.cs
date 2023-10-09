@@ -8,7 +8,9 @@ using Application = UnityEngine.Application;
 public class MoveManager : MonoBehaviour
 {
     public static MoveManager In;
+    
     public RectTransform pickRectTransform;
+    public Transform arisTransform;
 
     public static bool isGround;
     private void Awake()
@@ -57,24 +59,9 @@ public class MoveManager : MonoBehaviour
             _gravity = 2;
         }
     }
-
-    // public void FixedUpdate()
-    // {
-    //     if (Application.isEditor || _isPick) return;
-    //     
-    //     isGround = TransparentApp.IsGround();
-    //
-    //     DebugUi.Debug = isGround.ToString();
-    //     
-    //     if (!isGround)
-    //     {
-    //         gravity += 1 * Time.deltaTime;
-    //         var rect = TransparentApp.GetLeftUpVector2();
-    //         TransparentApp.API.Move((int)rect.x ,(int)Math.Round(gravity));
-    //     }
-    //     else
-    //     {
-    //         gravity = 0;
-    //     }
-    // }
+    
+    public void SetRotate(int rotateY)
+    {
+        arisTransform.eulerAngles = new Vector3(0, rotateY, 0);
+    }
 }

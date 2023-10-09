@@ -478,6 +478,7 @@ GameObject:
   - component: {fileID: 503631908}
   - component: {fileID: 503631910}
   - component: {fileID: 503631909}
+  - component: {fileID: 503631911}
   m_Layer: 5
   m_Name: Face
   m_TagString: Untagged
@@ -543,6 +544,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 503631907}
   m_CullTransparentMesh: 1
+--- !u!95 &503631911
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503631907}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4e69dd61f35262544b2653558d0dc0c2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &681485508
 GameObject:
   m_ObjectHideFlags: 0
@@ -796,6 +817,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickRectTransform: {fileID: 681485509}
+  arisTransform: {fileID: 1837110023}
 --- !u!4 &868053512
 Transform:
   m_ObjectHideFlags: 0
@@ -1823,6 +1845,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1837110029}
+  eyesClose: {fileID: 503631911}
   schedulerDataList:
   - scheduleType: 0
     maxTime: 0

@@ -95,8 +95,7 @@ public class TransparentApp : MonoBehaviour
         int style = GetWindowLong(hWnd, GWL_STYLE);
         SetWindowLong(hWnd, GWL_STYLE, (style & ~WS_BORDER & ~WS_CAPTION));
         
-        var pos = Screen.mainWindowDisplayInfo;
-        
+        // var pos = Screen.mainWindowDisplayInfo;
         // Move(pos.width / 2, pos.height / 2);
         
         
@@ -134,24 +133,24 @@ public class TransparentApp : MonoBehaviour
     }
 
 
-    public void Update()
-    {
-        if (Application.isEditor) return;
-        if (GameManager.IsGameMode)
-        {
-            return;
-        }
-#if UNITY_STANDALONE_WIN
-        // int hMonitor = MonitorFromWindow(hWnd, 0);
-        // MONITORINFO monitorInfo = new MONITORINFO();
-        // monitorInfo.cbSize = Marshal.SizeOf(typeof(MONITORINFO));
-        // GetMonitorInfo(hMonitor, ref monitorInfo);
-        
-        BringWindowToTop(hWnd);
-        int style = GetWindowLong(hWnd, GWL_STYLE);
-        SetWindowLong(hWnd, GWL_STYLE, (style & ~WS_BORDER & ~WS_CAPTION));
-#endif
-    }
+//     public void Update()
+//     {
+//         if (Application.isEditor) return;
+//         if (GameManager.IsGameMode)
+//         {
+//             return;
+//         }
+// #if UNITY_STANDALONE_WIN
+//         // int hMonitor = MonitorFromWindow(hWnd, 0);
+//         // MONITORINFO monitorInfo = new MONITORINFO();
+//         // monitorInfo.cbSize = Marshal.SizeOf(typeof(MONITORINFO));
+//         // GetMonitorInfo(hMonitor, ref monitorInfo);
+//         
+//         BringWindowToTop(hWnd);
+//         int style = GetWindowLong(hWnd, GWL_STYLE);
+//         SetWindowLong(hWnd, GWL_STYLE, (style & ~WS_BORDER & ~WS_CAPTION));
+// #endif
+//     }
     public void MoveWindowToBottomRight()
     {
         int screenWidth = Screen.currentResolution.width;
