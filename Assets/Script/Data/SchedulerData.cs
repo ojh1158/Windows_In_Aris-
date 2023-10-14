@@ -62,13 +62,12 @@ namespace Script.Data
             SchedulerManager.Instance.animator.Play("idle");
             yield return DialogueManager.Instance.StartCoroutine(startRandomWithType);
             var shouldPlayEyesClose = Random.Range(0, 2) == 0;
-            if (shouldPlayEyesClose)
-            {
-                yield return new WaitForSeconds(0.1f);
-                DebugUi.Debug = "isClose";
-                SchedulerManager.Instance.eyesClose.Play("EyesClose");
-            }
-            yield return new WaitForSeconds(Random.Range(3f, 6f));
+            yield return new WaitForSeconds(0.1f);
+            DebugUi.Debug = "start";
+            
+            yield return new WaitForSeconds(Random.Range(1f, 2f));
+            DebugUi.Debug = "end";
+            //SchedulerManager.Instance.eyesClose.SetBool(IsEyesClose, false);
             DebugUi.Debug = "";
         }
 
@@ -77,6 +76,8 @@ namespace Script.Data
             ("right",-1, 0, 0),
             ("left",1, 0, 180)
         };
+
+        private static readonly int IsEyesClose = Animator.StringToHash("isEyesClose");
 
         private IEnumerator Walking()
         {

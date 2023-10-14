@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class GifManager : MonoBehaviour
 {
+    public static GifManager Instance;
+    
     public Image image;
     
     public List<Sprite> spriteList;
@@ -12,20 +14,17 @@ public class GifManager : MonoBehaviour
     public float speed;
     
     
-    // void Awake()
-    // {
-    //     StartCoroutine(GIF());
-    // }
-    
-    IEnumerator GIF()
+    void Awake()
     {
-        while (true)
+        Instance = this;
+    }
+    
+    public IEnumerator EyesClose()
+    {
+        foreach (var sprite in spriteList)
         {
-            foreach (var sprite in spriteList)
-            {
-                image.sprite = sprite;
-                yield return new WaitForSecondsRealtime(speed);
-            }
+            image.sprite = sprite;
+            yield return new WaitForSecondsRealtime(speed);
         }
     }
 }

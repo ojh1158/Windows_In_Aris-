@@ -478,7 +478,7 @@ GameObject:
   - component: {fileID: 503631908}
   - component: {fileID: 503631910}
   - component: {fileID: 503631909}
-  - component: {fileID: 503631911}
+  - component: {fileID: 503631912}
   m_Layer: 5
   m_Name: Face
   m_TagString: Untagged
@@ -544,26 +544,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 503631907}
   m_CullTransparentMesh: 1
---- !u!95 &503631911
-Animator:
-  serializedVersion: 4
+--- !u!114 &503631912
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 503631907}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4e69dd61f35262544b2653558d0dc0c2, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9091f814c68f11748a0512e6e07eca43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  image: {fileID: 503631909}
+  spriteList:
+  - {fileID: -1549783031, guid: 37229f288c4b97e4ba01f0ae8f0670a1, type: 3}
+  - {fileID: 1379740804, guid: 37229f288c4b97e4ba01f0ae8f0670a1, type: 3}
+  - {fileID: 2122414227, guid: 37229f288c4b97e4ba01f0ae8f0670a1, type: 3}
+  - {fileID: -929625932, guid: 37229f288c4b97e4ba01f0ae8f0670a1, type: 3}
+  - {fileID: -929625932, guid: 37229f288c4b97e4ba01f0ae8f0670a1, type: 3}
+  - {fileID: 2122414227, guid: 37229f288c4b97e4ba01f0ae8f0670a1, type: 3}
+  - {fileID: 1379740804, guid: 37229f288c4b97e4ba01f0ae8f0670a1, type: 3}
+  - {fileID: -1549783031, guid: 37229f288c4b97e4ba01f0ae8f0670a1, type: 3}
+  speed: 0.1
 --- !u!1 &681485508
 GameObject:
   m_ObjectHideFlags: 0
@@ -1845,7 +1848,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1837110029}
-  eyesClose: {fileID: 503631911}
+  eyesClose: {fileID: 0}
   schedulerDataList:
   - scheduleType: 0
     maxTime: 0
