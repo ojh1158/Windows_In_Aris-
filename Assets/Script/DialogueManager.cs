@@ -100,7 +100,7 @@ public class DialogueManager : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         
         dialogueText.text = "";
-        dialogueRect.sizeDelta = new Vector2(0, 0);
+        dialogueRect.sizeDelta = Vector2.zero;
         _dialogueCoroutine = null;
     }
 }
