@@ -11,7 +11,7 @@ namespace Script.Data
     {
         Idle = 0,
         Walking = 1,
-        // Jump = 2,
+        Pick = 2,
     }
 
     [Serializable]
@@ -20,7 +20,7 @@ namespace Script.Data
         public ScheduleType scheduleType;
         public float maxTime;
         public float minTime;
-
+    
         public (float Max, float Min) GetTime()
         {
             return (maxTime, minTime);
@@ -45,7 +45,8 @@ namespace Script.Data
             _scheduleList = new()
             {
                 ( ScheduleType.Idle, Idle()),
-                ( ScheduleType.Walking, Walking())
+                ( ScheduleType.Walking, Walking()),
+                ( ScheduleType.Pick,Pick()),
             };
             return _scheduleList.Find(data => data.scheduleType == scheduleType).iEnumerator;
         }
@@ -58,7 +59,6 @@ namespace Script.Data
             var shouldPlayEyesClose = Random.Range(0, 2) == 0;
             if (shouldPlayEyesClose)
             {
-                // DebugUi.Debug = "start";
                 SchedulerManager.Instance.animator.Play("EyesClose");
                 foreach (var animationClip in SchedulerManager.Instance.animator.runtimeAnimatorController.animationClips)
                 {
@@ -67,12 +67,11 @@ namespace Script.Data
                         yield return new WaitForSeconds(animationClip.length);
                     }
                 }
-                // DebugUi.Debug = "end";
             }
             yield return new WaitForSeconds(Random.Range(1f, 2f));
         }
 
-        private readonly List<(string type, int x, int y, int rotateY)> MoveData = new()
+        private readonly List<(string type, int x, int y, int rotateY)> _moveData = new()
         {
             ("right",-1, 0, 0),
             ("left",1, 0, 180)
@@ -81,7 +80,7 @@ namespace Script.Data
         private IEnumerator Walking()
         {
             (int x, int y) movePos = new();
-            var move = MoveData[Random.Range(0, MoveData.Count)];
+            var move = _moveData[Random.Range(0, _moveData.Count)];
 
             float time = 0;
             
@@ -93,7 +92,7 @@ namespace Script.Data
                 var pos = TransparentApp.GetWindowsPos();
                 if (movePos == pos)
                 {
-                    move = MoveData.Find(data => data.type != move.type);
+                    move = _moveData.Find(data => data.type != move.type);
                     MoveManager.In.SetRotate(move.rotateY);
                 }
                 movePos = pos;
@@ -101,6 +100,12 @@ namespace Script.Data
                 time += 0.025f;
                 yield return new WaitForSeconds(0.025f);
             }
+        }
+
+        private IEnumerator Pick()
+        {
+            yield return DialogueManager.Instance.StartCoroutine(DialogueManager.Instance.StartRandomWithType(DialogueType.PickUp));
+            yield return new WaitForSeconds(Random.Range(1f, 3f));
         }
     }
 }
