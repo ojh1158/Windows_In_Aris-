@@ -20,8 +20,6 @@ public class SchedulerManager : MonoBehaviour
     private Coroutine _schedule;
 
     private Schedule schedule = new();
-
-    private ScheduleType _scheduleType;
     
     private void Awake()
     {
@@ -34,7 +32,7 @@ public class SchedulerManager : MonoBehaviour
     {
         StopCoroutine(_schedule);
         _schedule = StartCoroutine(schedule.StartSchedule(scheduleType));
-        _scheduleType = scheduleType;
+        
     }
 
     private IEnumerator RunSchedule()
@@ -43,20 +41,10 @@ public class SchedulerManager : MonoBehaviour
         {
             var scheduleType = (ScheduleType)Random.Range(0, Enum.GetValues(typeof(ScheduleType)).Length);
             _schedule = StartCoroutine(schedule.StartSchedule(scheduleType));
-            _scheduleType = scheduleType;
             yield return _schedule;
             _schedule = null;
 
             yield return new WaitForSeconds(0.1f);
-        }
-        // ReSharper disable once IteratorNeverReturns
-    }
-    
-    public void Pick()
-    {
-        if (_scheduleType is not ScheduleType.Pick)
-        {
-            StartScheduler(ScheduleType.Pick);
         }
     }
 }

@@ -33,11 +33,14 @@ public class MoveManager : MonoBehaviour
                 return;
             }
             TransparentApp.API.Pick();
-            SchedulerManager.Instance.Pick();
             _gravity = 2;
+            // _isPick = true;
             return;
         }
-        
+        // else
+        // {
+        //     _isPick = false;
+        // }
         
         if (Application.isEditor /*||_isPick*/) return;
         
@@ -45,7 +48,9 @@ public class MoveManager : MonoBehaviour
         
         if (!isGround)
         {
+            // _gravityWeighted += Time.deltaTime;
             _gravity += Time.deltaTime * 20;
+            // DebugUi.Debug = _gravity.ToString("F2");
             var rect = TransparentApp.GetLeftUpVector2();
             TransparentApp.API.Move((int)rect.x ,(int)rect.y + (int)_gravity);
         }
