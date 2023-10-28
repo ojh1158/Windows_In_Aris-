@@ -25,7 +25,7 @@ public class MoveManager : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (!MenuManager.IsMenuOpen && Input.GetMouseButton(0))
         {
             isGround = false;
             if (Application.isEditor)

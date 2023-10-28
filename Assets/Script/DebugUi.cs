@@ -12,6 +12,6 @@ public class DebugUi : MonoBehaviour
     void Update()
     {
         // 
-        // text.text = Debug;
+        text.text = Debug;
     }
 }

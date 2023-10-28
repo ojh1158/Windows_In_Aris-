@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -7,13 +8,25 @@ namespace Script.WindowsAPI
     public class SystemTray
     {
         public delegate void ResetCallBack(string message);
+        
+        [DllImport("libSystemTray.dll")]
+        public static extern void ShowTrayIcon();
 
-        [DllImport("SystemTray.dll")]
-        public static extern void Reset(ResetCallBack callback);
+        [DllImport("libSystemTray.dll")]
+        public static extern void HideTrayIcon();
+
+        [DllImport("libSystemTray.dll")]
+        public static extern void RegisterCallback(ResetCallBack callback);
 
         public void Init()
         {
-            Reset(ResetGame);
+            ShowTrayIcon();
+            // RegisterCallback(delegate(string message) { DebugUi.Debug = message; });
+        }
+
+        public void Quit()
+        {
+            HideTrayIcon();
         }
 
         private void ResetGame(string message)
