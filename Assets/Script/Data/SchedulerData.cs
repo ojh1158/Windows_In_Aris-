@@ -34,10 +34,16 @@ namespace Script.Data
 
         private List<(ScheduleType scheduleType, IEnumerator iEnumerator)> _scheduleList;
 
+        // public Schedule()
+        // {
+        //     
+        // }
+
         public void SetSchedulerData(List<SchedulerData> schedulerDataList)
         {
             _schedulerDataList = schedulerDataList;
-            _dialogueDataList = DialogueManager.Instance.dialogueDataList.FindAll(data => data.dialogueType is DialogueType.Normal or DialogueType.PickUp);
+            _dialogueDataList = DialogueManager.Instance.dialogueDataList.ToList();
+            _dialogueDataList.RemoveAll(data => data.dialogueType == DialogueType.MemoReal);
         }
 
         public IEnumerator StartSchedule(ScheduleType scheduleType)
@@ -56,20 +62,13 @@ namespace Script.Data
             SchedulerManager.Instance.animator.Play("idle");
             yield return DialogueManager.Instance.StartCoroutine(startRandomWithType);
             var shouldPlayEyesClose = Random.Range(0, 2) == 0;
-            if (shouldPlayEyesClose)
-            {
-                // DebugUi.Debug = "start";
-                SchedulerManager.Instance.animator.Play("EyesClose");
-                foreach (var animationClip in SchedulerManager.Instance.animator.runtimeAnimatorController.animationClips)
-                {
-                    if (animationClip.name == "EyesClose")
-                    {
-                        yield return new WaitForSeconds(animationClip.length);
-                    }
-                }
-                // DebugUi.Debug = "end";
-            }
+            yield return new WaitForSeconds(0.1f);
+            DebugUi.Debug = "start";
+            
             yield return new WaitForSeconds(Random.Range(1f, 2f));
+            DebugUi.Debug = "end";
+            //SchedulerManager.Instance.eyesClose.SetBool(IsEyesClose, false);
+            DebugUi.Debug = "";
         }
 
         private readonly List<(string type, int x, int y, int rotateY)> MoveData = new()
@@ -77,6 +76,8 @@ namespace Script.Data
             ("right",-1, 0, 0),
             ("left",1, 0, 180)
         };
+
+        private static readonly int IsEyesClose = Animator.StringToHash("isEyesClose");
 
         private IEnumerator Walking()
         {
@@ -98,7 +99,7 @@ namespace Script.Data
                 }
                 movePos = pos;
                 TransparentApp.API.Move(pos.x + move.x , pos.y + move.y);
-                time += 0.025f;
+                time += 0.1f;
                 yield return new WaitForSeconds(0.025f);
             }
         }
