@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Script.WindowsAPI
 {
-    public class SystemTray
+    public struct SystemTray
     {
         public delegate void ResetCallBack(string message);
         
@@ -21,17 +21,11 @@ namespace Script.WindowsAPI
         public void Init()
         {
             ShowTrayIcon();
-            // RegisterCallback(delegate(string message) { DebugUi.Debug = message; });
         }
 
         public void Quit()
         {
             HideTrayIcon();
-        }
-
-        private void ResetGame(string message)
-        {
-            
         }
     }
 }
