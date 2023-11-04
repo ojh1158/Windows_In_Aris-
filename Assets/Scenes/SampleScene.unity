@@ -604,6 +604,7 @@ Animation:
   m_Animation: {fileID: 7400000, guid: 68467d1869b085246911fb05da7ebbfa, type: 2}
   m_Animations:
   - {fileID: 7400000, guid: 68467d1869b085246911fb05da7ebbfa, type: 2}
+  - {fileID: 7400000, guid: c50ab7045d52a9943892d3e51aeda7af, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
@@ -896,7 +897,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &503631908
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2942,7 +2943,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 837677105, guid: 4eaa73caebb42734e8bbb056f47f6548, type: 3}
+  m_Sprite: {fileID: -1204391114, guid: 9ba3f4b10b99bfe42a97a9ef44c7329e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

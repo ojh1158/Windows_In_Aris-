@@ -86,7 +86,7 @@ public class TransparentApp : MonoBehaviour
 #if UNITY_STANDALONE_WIN
         Screen.SetResolution(200,250,false);
         
-        hWnd = GetActiveWindow();
+        hWnd = (int)FindWindow(null, "Aris");
         
         SetWindowLong(hWnd, GWL_EXSTYLE, WS_EX_LAYERED);
         SetLayeredWindowAttributes(hWnd, 0x000300, 255, LWA_ALPHA | LWA_COLORKEY);
