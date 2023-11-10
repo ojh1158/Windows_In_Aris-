@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -7,25 +8,44 @@ namespace Script.WindowsAPI
 {
     public struct SystemTray
     {
-        public delegate void ResetCallBack(string message);
-        
-        [DllImport("libSystemTray.dll")]
-        public static extern void ShowTrayIcon();
+        [DllImport("SystemTrayClass", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void SetMonitorInfo(string[] monitorName);
 
-        [DllImport("libSystemTray.dll")]
+        [DllImport("SystemTrayClass", CallingConvention = CallingConvention.Cdecl)]
         public static extern void HideTrayIcon();
 
-        [DllImport("libSystemTray.dll")]
-        public static extern void RegisterCallback(ResetCallBack callback);
+        [DllImport("SystemTrayClass", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void Main();
+        
+        [DllImport("SystemTrayClass", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void TrayExit(object sender, EventArgs e);
+        
+        // [DllImport("TrayPlugin", CallingConvention = CallingConvention.Cdecl)]
+        // public static extern void Exit();
 
-        public void Init()
+        private static List<string> _monitorName = new();
+
+        public SystemTray Start()
         {
-            ShowTrayIcon();
+            Main();
+            return this;
         }
 
-        public void Quit()
+        public SystemTray SetMonitor()
         {
-            HideTrayIcon();
+            for (int i = 0; i < Display.displays.Length; i++)
+            {
+                _monitorName.Add(i + " : " + Display.displays[i].systemWidth + "x" + Display.displays[i].systemHeight);
+            }
+            
+            SetMonitorInfo(_monitorName.ToArray());
+            return this;
+        }
+
+        public static void Exit()
+        {
+            TrayExit(null, null);
+            Application.Quit();
         }
     }
 }

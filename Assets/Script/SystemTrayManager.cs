@@ -8,11 +8,13 @@ public class SystemTrayManager : MonoBehaviour
 {
    private void Awake()
    {
-      new SystemTray().Init();
+      var systemTray = new SystemTray();
+      systemTray.Start();
+      systemTray.SetMonitor();
    }
 
    private void OnApplicationQuit()
    {
-      new SystemTray().Quit();
+      SystemTray.Exit();
    }
 }
