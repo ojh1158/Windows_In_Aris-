@@ -12,45 +12,39 @@ public class MoveManager : MonoBehaviour
     public RectTransform pickRectTransform;
     public Transform arisTransform;
 
-    public static bool isGround;
+    public static bool IsGround;
+    public static bool IsPick;
     private void Awake()
     {
         In = this;
     }
-
-    private bool _isPick;
     
     private float _gravity = 2;
     // private float _gravityWeighted;
 
     public void Update()
     {
-        if (!MenuManager.IsMenuOpen && Input.GetMouseButton(0))
+        IsPick = Input.GetMouseButton(0);
+        if (!MenuManager.IsMenuOpen && IsPick)
         {
-            isGround = false;
+            IsGround = false;
+            StartCoroutine(SchedulerManager.Instance.Pick());
             if (Application.isEditor)
             {
                 return;
             }
             TransparentApp.API.Pick();
             _gravity = 2;
-            // _isPick = true;
             return;
         }
-        // else
-        // {
-        //     _isPick = false;
-        // }
         
-        if (Application.isEditor /*||_isPick*/) return;
+        if (Application.isEditor) return;
+
+        IsGround = TransparentApp.IsGround();
         
-        isGround = TransparentApp.IsGround();
-        
-        if (!isGround)
+        if (!IsGround)
         {
-            // _gravityWeighted += Time.deltaTime;
             _gravity += Time.deltaTime * 20;
-            // DebugUi.Debug = _gravity.ToString("F2");
             var rect = TransparentApp.GetLeftUpVector2();
             TransparentApp.API.Move((int)rect.x ,(int)rect.y + (int)_gravity);
         }

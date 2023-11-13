@@ -6,15 +6,15 @@ using UnityEngine;
 
 public class SystemTrayManager : MonoBehaviour
 {
-   private void Awake()
-   {
-      var systemTray = new SystemTray();
-      systemTray.Start();
-      systemTray.SetMonitor();
-   }
-
-   private void OnApplicationQuit()
-   {
-      SystemTray.Exit();
-   }
+   // private void Awake()
+   // {
+   //    var systemTray = new SystemTray();
+   //    systemTray.Start();
+   //    systemTray.SetMonitor();
+   // }
+   //
+   // private void OnApplicationQuit()
+   // {
+   //    SystemTray.Exit();
+   // }
 }

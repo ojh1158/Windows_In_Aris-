@@ -11,6 +11,7 @@ namespace Script.Data
     {
         Idle = 0,
         Walking = 1,
+        Pick = 2,
         // Jump = 2,
     }
 
@@ -32,7 +33,7 @@ namespace Script.Data
         private List<SchedulerData> _schedulerDataList;
         private List<DialogueData> _dialogueDataList;
 
-        private List<(ScheduleType scheduleType, IEnumerator iEnumerator)> _scheduleList;
+        private List<(ScheduleType scheduleType, Func<IEnumerator> iEnumerator)> _scheduleList;
 
         public void SetSchedulerData(List<SchedulerData> schedulerDataList)
         {
@@ -44,10 +45,11 @@ namespace Script.Data
         { 
             _scheduleList = new()
             {
-                ( ScheduleType.Idle, Idle()),
-                ( ScheduleType.Walking, Walking())
+                ( ScheduleType.Idle, Idle),
+                ( ScheduleType.Walking, Walking),
+                ( ScheduleType.Pick, Pick)
             };
-            return _scheduleList.Find(data => data.scheduleType == scheduleType).iEnumerator;
+            return _scheduleList.Find(data => data.scheduleType == scheduleType).iEnumerator();
         }
         
         private IEnumerator Idle()
@@ -101,6 +103,12 @@ namespace Script.Data
                 time += 0.025f;
                 yield return new WaitForSeconds(0.025f);
             }
+        }
+
+        private IEnumerator Pick()
+        {
+            SchedulerManager.Instance.animator.Play("Pick");
+            yield return new WaitUntil(() => !MoveManager.IsPick);
         }
     }
 }

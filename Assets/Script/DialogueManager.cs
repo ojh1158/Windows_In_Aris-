@@ -103,4 +103,12 @@ public class DialogueManager : MonoBehaviour
         dialogueRect.sizeDelta = Vector2.zero;
         _dialogueCoroutine = null;
     }
+
+    public void StopAllCoroutineAndIntoText()
+    {
+        StopAllCoroutines();
+        dialogueText.text = "";
+        dialogueRect.sizeDelta = Vector2.zero;
+        _dialogueCoroutine = null;
+    }
 }
