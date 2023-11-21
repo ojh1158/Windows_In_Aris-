@@ -27,6 +27,7 @@ public class SchedulerManager : MonoBehaviour
     private Schedule schedule = new();
 
     private bool _isPick;
+    public static bool IsRunScheduler;
     
     private void Awake()
     {
@@ -41,6 +42,7 @@ public class SchedulerManager : MonoBehaviour
         StopCoroutine(_runSchedule);
         DialogueManager.Instance.StopAllCoroutineAndIntoText();
         animator.Play("idle");
+        IsRunScheduler = false;
     }
 
     public void StartSchedule()
@@ -49,6 +51,7 @@ public class SchedulerManager : MonoBehaviour
         StopCoroutine(_runSchedule);
         DialogueManager.Instance.StopAllCoroutineAndIntoText();
         _schedule = StartCoroutine(RunSchedule());
+        IsRunScheduler = true;
     }
     
     
@@ -62,9 +65,10 @@ public class SchedulerManager : MonoBehaviour
         halo.transform.SetAsLastSibling();
         haloAnimation.Play("PickHalo");
         StopSchedule();
-        yield return StartCoroutine(schedule.StartSchedule(ScheduleType.Pick));
+        yield return schedule.StartSchedule(ScheduleType.Pick);
         halo.transform.SetAsFirstSibling();
         haloAnimation.Play("halo");
+        yield return schedule.StartSchedule(ScheduleType.Fall);
         StartSchedule();
         _isPick = false;
     }

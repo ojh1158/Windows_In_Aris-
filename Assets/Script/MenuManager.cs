@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 public class MenuManager : MonoBehaviour
@@ -9,6 +11,12 @@ public class MenuManager : MonoBehaviour
     [Header("MenuGameObject")] 
     public GameObject menuGameObject;
 
+    [Header("Prefab")] 
+    public GameObject menuButton;
+
+    [Header("MenuTransForm")] 
+    public Transform menuTransform;
+    
     [Header("Animation")] 
     public AnimationClip leftClip;
     public AnimationClip rightClip;
@@ -31,7 +39,7 @@ public class MenuManager : MonoBehaviour
         {
             if (Input.GetMouseButton(1))
             {
-                yield return CloseMenuCoroutine();
+                CreateMenuButtons();
             }
 
             yield return null;
@@ -39,12 +47,28 @@ public class MenuManager : MonoBehaviour
         // ReSharper disable once IteratorNeverReturns
     }
 
-    public void CloseMenu()
+    public IEnumerator CloseMenu()
     {
-        StartCoroutine(CloseMenuCoroutine());
+        yield return PlayOpenCloseMenu();
     }
 
-    public IEnumerator CloseMenuCoroutine()
+    public void CreateMenuButtons()
+    {
+        AddButton("닫기", CloseMenu);
+        if (SchedulerManager.IsRunScheduler)
+        {
+            AddButton("행동 멈춤", StopMove);
+        }
+        else
+        {
+            AddButton("행동 시작", StartMove);
+        }
+        AddButton("모니터 선택", SetMonitor);
+        AddButton("종료", Exit);
+        
+    }
+
+    private IEnumerator PlayOpenCloseMenu()
     {
         if (!IsMenuOpen)
         {
@@ -102,20 +126,69 @@ public class MenuManager : MonoBehaviour
             menuGameObject.SetActive(false);
         }
     }
+
+    public void AddButton(string text, Func<IEnumerator> action)
+    {
+        var menu = Instantiate(menuButton, menuTransform).GetComponent<MenuButton>().SetButton(text, action);
+        
+        if (leftAnimationList.Count >= rightAnimationList.Count)
+        {
+            leftAnimationList.Add(menu.menuAnimation);
+        }
+        else
+        {
+            rightAnimationList.Add(menu.menuAnimation);
+        }
+    }
     
-    public void StartMove()
+    public void AddMonitorButton(string text,int num ,Func<int , IEnumerator> action)
+    {
+        var menu = Instantiate(menuButton, menuTransform).GetComponent<MenuButton>().SetMonitorButton(text, num ,action);
+        
+        if (leftAnimationList.Count >= rightAnimationList.Count)
+        {
+            leftAnimationList.Add(menu.menuAnimation);
+        }
+        else
+        {
+            rightAnimationList.Add(menu.menuAnimation);
+        }
+    }
+    
+    public IEnumerator StartMove()
     {
         SchedulerManager.Instance.StartSchedule();
+        yield break;
     }
 
-    public void StopMove()
+    public IEnumerator StopMove()
     {
         SchedulerManager.Instance.StopSchedule();
+        yield break;
     }
 
-    public void Exit()
+    public IEnumerator SetMonitor()
+    {
+        yield return PlayOpenCloseMenu();
+
+        for (var i = 0; i < Display.displays.Length; i++)
+        {
+            var display = Display.displays[i];
+            AddMonitorButton($"{i} : {display.renderingWidth} || {display.renderingHeight}", i , CallBackSetMonitor);
+        }
+
+        yield return PlayOpenCloseMenu();
+    }
+
+    public IEnumerator CallBackSetMonitor(int num)
+    {
+        yield break;
+    }
+
+    public IEnumerator Exit()
     {
         Application.Quit();
+        yield break;
     }
     
 }

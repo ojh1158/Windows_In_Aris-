@@ -12,7 +12,7 @@ namespace Script.Data
         Idle = 0,
         Walking = 1,
         Pick = 2,
-        // Jump = 2,
+        Fall = 3,
     }
 
     [Serializable]
@@ -47,7 +47,8 @@ namespace Script.Data
             {
                 ( ScheduleType.Idle, Idle),
                 ( ScheduleType.Walking, Walking),
-                ( ScheduleType.Pick, Pick)
+                ( ScheduleType.Pick, Pick),
+                ( ScheduleType.Fall, Fall),
             };
             return _scheduleList.Find(data => data.scheduleType == scheduleType).iEnumerator();
         }
@@ -109,6 +110,12 @@ namespace Script.Data
         {
             SchedulerManager.Instance.animator.Play("Pick");
             yield return new WaitUntil(() => !MoveManager.IsPick);
+        }
+        
+        private IEnumerator Fall()
+        {
+            SchedulerManager.Instance.animator.Play("Fall");
+            yield return new WaitUntil(() => MoveManager.IsGround);
         }
     }
 }
