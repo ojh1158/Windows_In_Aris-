@@ -502,12 +502,8 @@ MonoBehaviour:
   menuTransform: {fileID: 839628076}
   leftClip: {fileID: 7400000, guid: 495fbb465ae2add4d8cf10e40f68e0ea, type: 2}
   rightClip: {fileID: 7400000, guid: 9afe3604c98ff7542820f33bef84b518, type: 2}
-  leftAnimationList:
-  - {fileID: 0}
-  - {fileID: 0}
-  rightAnimationList:
-  - {fileID: 0}
-  - {fileID: 0}
+  leftAnimationList: []
+  rightAnimationList: []
 --- !u!4 &475872948
 Transform:
   m_ObjectHideFlags: 0
@@ -1771,7 +1767,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1792060629
 RectTransform:
   m_ObjectHideFlags: 0

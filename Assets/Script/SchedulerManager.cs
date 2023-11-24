@@ -34,6 +34,7 @@ public class SchedulerManager : MonoBehaviour
         Instance = this;
         schedule.SetSchedulerData(schedulerDataList);
         _schedule = StartCoroutine(RunSchedule());
+        IsRunScheduler = true;
     }
 
     public void StopSchedule()

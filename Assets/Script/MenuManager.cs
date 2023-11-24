@@ -26,6 +26,7 @@ public class MenuManager : MonoBehaviour
     public List<Animation> rightAnimationList;
 
 
+    public static bool IsCreateMenuOpen;
     public static bool IsMenuOpen;
 
     public void Start()
@@ -37,9 +38,16 @@ public class MenuManager : MonoBehaviour
     {
         while (true)
         {
-            if (Input.GetMouseButton(1))
+            if (Input.GetMouseButtonUp(1))
             {
-                CreateMenuButtons();
+                if (!IsCreateMenuOpen)
+                {
+                    CreateMenuButtons();
+                }
+                else
+                {
+                    yield return PlayOpenCloseMenu();
+                }
             }
 
             yield return null;
@@ -54,6 +62,7 @@ public class MenuManager : MonoBehaviour
 
     public void CreateMenuButtons()
     {
+        IsCreateMenuOpen = true;
         AddButton("닫기", CloseMenu);
         if (SchedulerManager.IsRunScheduler)
         {
@@ -63,13 +72,14 @@ public class MenuManager : MonoBehaviour
         {
             AddButton("행동 시작", StartMove);
         }
-        AddButton("모니터 선택", SetMonitor);
+        // AddButton("모니터 선택", SetMonitor);
         AddButton("종료", Exit);
-        
+        StartCoroutine(PlayOpenCloseMenu());
     }
 
     private IEnumerator PlayOpenCloseMenu()
     {
+        // Debug.Log(IsMenuOpen);
         if (!IsMenuOpen)
         {
             IsMenuOpen = true;
@@ -112,6 +122,7 @@ public class MenuManager : MonoBehaviour
                 anime.Play();
             }
             IsMenuOpen = false;
+            IsCreateMenuOpen = false;
         }
 
         var animationList = new List<Animation>();
@@ -119,10 +130,16 @@ public class MenuManager : MonoBehaviour
         animationList.AddRange(rightAnimationList);
 
 
-        yield return new WaitUntil(() => !animationList.Exists(data => data.isPlaying));
+        yield return new WaitUntil(() => !animationList.Exists(data => data == null
+                                                                       || data.isPlaying));
 
         if (!IsMenuOpen)
         {
+            foreach (var animate in leftAnimationList) Destroy(animate.transform.parent.gameObject);
+            foreach (var animate in rightAnimationList) Destroy(animate.transform.parent.gameObject);
+            
+            leftAnimationList.Clear();
+            rightAnimationList.Clear();
             menuGameObject.SetActive(false);
         }
     }
@@ -131,7 +148,7 @@ public class MenuManager : MonoBehaviour
     {
         var menu = Instantiate(menuButton, menuTransform).GetComponent<MenuButton>().SetButton(text, action);
         
-        if (leftAnimationList.Count >= rightAnimationList.Count)
+        if (leftAnimationList.Count <= rightAnimationList.Count)
         {
             leftAnimationList.Add(menu.menuAnimation);
         }
@@ -145,7 +162,7 @@ public class MenuManager : MonoBehaviour
     {
         var menu = Instantiate(menuButton, menuTransform).GetComponent<MenuButton>().SetMonitorButton(text, num ,action);
         
-        if (leftAnimationList.Count >= rightAnimationList.Count)
+        if (leftAnimationList.Count <= rightAnimationList.Count)
         {
             leftAnimationList.Add(menu.menuAnimation);
         }
@@ -157,32 +174,35 @@ public class MenuManager : MonoBehaviour
     
     public IEnumerator StartMove()
     {
+        yield return PlayOpenCloseMenu();
         SchedulerManager.Instance.StartSchedule();
-        yield break;
     }
 
     public IEnumerator StopMove()
     {
+        yield return PlayOpenCloseMenu(); 
         SchedulerManager.Instance.StopSchedule();
-        yield break;
     }
 
     public IEnumerator SetMonitor()
     {
         yield return PlayOpenCloseMenu();
 
+        Debug.Log(Display.displays.Length);
         for (var i = 0; i < Display.displays.Length; i++)
         {
             var display = Display.displays[i];
-            AddMonitorButton($"{i} : {display.renderingWidth} || {display.renderingHeight}", i , CallBackSetMonitor);
+            AddMonitorButton($"{i + 1} : {display.renderingWidth} || {display.renderingHeight}", i , CallBackSetMonitor);
         }
-
+        IsCreateMenuOpen = true;
         yield return PlayOpenCloseMenu();
     }
 
     public IEnumerator CallBackSetMonitor(int num)
     {
-        yield break;
+        Debug.Log(num);
+        TransparentApp.API.MoveWindowToMonitor(num);
+        yield return PlayOpenCloseMenu();
     }
 
     public IEnumerator Exit()

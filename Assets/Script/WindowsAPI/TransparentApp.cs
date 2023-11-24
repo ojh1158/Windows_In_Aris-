@@ -60,10 +60,10 @@ public class TransparentApp : MonoBehaviour
     [StructLayout(LayoutKind.Sequential)]
     public struct Rect
     {
-        public int Left;
-        public int Top;
-        public int Right;
-        public int Bottom;
+        public int left;
+        public int top;
+        public int right;
+        public int bottom;
     }
     
     private static int hWnd;
@@ -285,11 +285,43 @@ public class TransparentApp : MonoBehaviour
             int newX = p.x - windowWidth / 2;
             int newY = p.y - windowHeight / 2;
 
-            var pos = MoveManager.In.pickRectTransform.localPosition;
+            var pos = MoveManager.Instance.pickRectTransform.localPosition;
             
             Move(newX - (int)pos.x,newY + (int)pos.y);
 #endif
         }        
+    }
+    
+    [DllImport("user32.dll")]
+    public static extern bool EnumDisplayMonitors(IntPtr hdc, IntPtr lpRect, MonitorEnumProc callback, IntPtr dwData);
+
+    // [DllImport("user32.dll", CharSet = CharSet.Auto)]
+    // public static extern bool GetMonitorInfo(IntPtr hMonitor, MONITORINFO lpmi);
+
+    public delegate bool MonitorEnumProc(IntPtr hMonitor, IntPtr hdcMonitor, ref RECT lprcMonitor, IntPtr dwData);
+    
+    public void MoveWindowToMonitor(int monitorIndex)
+    {
+#if UNITY_STANDALONE_WIN
+        Debug.Log($"{Screen.mainWindowDisplayInfo.name}");
+        var num = 0;
+            EnumDisplayMonitors(IntPtr.Zero, IntPtr.Zero, 
+            (IntPtr hMonitor, IntPtr hdcMonitor, ref RECT lprcMonitor, IntPtr dwData) =>
+            {
+                if (num == monitorIndex)
+                {
+                    Debug.Log($"Monitor Bounds: {lprcMonitor.Right} || {lprcMonitor.Top} || {lprcMonitor.Bottom} || {lprcMonitor.Left}");
+                    MONITORINFO monitorInfo = new MONITORINFO();
+                    GetMonitorInfo((int)hMonitor,ref monitorInfo);
+                    SetWindowPos(hWnd, HWND_TOPMOST, lprcMonitor.Left, lprcMonitor.Top, 0, 0, SWP_NOSIZE);
+                    // Screen.MoveMainWindowTo(Screen.mainWindowDisplayInfo, new Vector2Int(0, 0));
+                    Screen.SetResolution(200, 250, false);
+                }
+                num++;
+                return true;
+                
+            }, IntPtr.Zero);
+#endif
     }
     
     // public void CreateMenu()

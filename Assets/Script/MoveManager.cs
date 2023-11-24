@@ -7,7 +7,7 @@ using Application = UnityEngine.Application;
 
 public class MoveManager : MonoBehaviour
 {
-    public static MoveManager In;
+    public static MoveManager Instance;
     
     public RectTransform pickRectTransform;
     public Transform arisTransform;
@@ -16,7 +16,7 @@ public class MoveManager : MonoBehaviour
     public static bool IsPick;
     private void Awake()
     {
-        In = this;
+        Instance = this;
     }
     
     private float _gravity = 2;

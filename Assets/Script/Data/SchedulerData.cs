@@ -90,14 +90,14 @@ namespace Script.Data
             
             SchedulerManager.Instance.animator.Play("walk");
             
-            MoveManager.In.SetRotate(move.rotateY);
+            MoveManager.Instance.SetRotate(move.rotateY);
             while (time < Random.Range(5f, 10f))
             {
                 var pos = TransparentApp.GetWindowsPos();
                 if (movePos == pos)
                 {
                     move = MoveData.Find(data => data.type != move.type);
-                    MoveManager.In.SetRotate(move.rotateY);
+                    MoveManager.Instance.SetRotate(move.rotateY);
                 }
                 movePos = pos;
                 TransparentApp.API.Move(pos.x + move.x , pos.y + move.y);

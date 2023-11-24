@@ -36,14 +36,7 @@ public class MenuButton : MonoBehaviour
     }
 
     public void Action()
-    {
-        if (_action != null)
-        {
-            StartCoroutine(_action());
-        }
-        else
-        {
-            StartCoroutine(_actionMonitor(_monitorNum));
-        }
+    { 
+        MoveManager.Instance.StartCoroutine(_action != null ? _action() : _actionMonitor(_monitorNum));
     }
 }
