@@ -27,6 +27,7 @@ public class SchedulerManager : MonoBehaviour
     private Schedule schedule = new();
 
     private bool _isPick;
+    public static bool IsSaveScheduler;
     public static bool IsRunScheduler;
     
     private void Awake()
@@ -65,12 +66,20 @@ public class SchedulerManager : MonoBehaviour
         _isPick = true;
         halo.transform.SetAsLastSibling();
         haloAnimation.Play("PickHalo");
+        IsSaveScheduler = IsRunScheduler;
         StopSchedule();
         yield return schedule.StartSchedule(ScheduleType.Pick);
         halo.transform.SetAsFirstSibling();
         haloAnimation.Play("halo");
         yield return schedule.StartSchedule(ScheduleType.Fall);
-        StartSchedule();
+        if (IsSaveScheduler)
+        {
+            StartSchedule();
+        }
+        else
+        {
+            StopSchedule();
+        }
         _isPick = false;
     }
 

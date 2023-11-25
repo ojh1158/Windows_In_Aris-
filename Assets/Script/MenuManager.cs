@@ -60,11 +60,21 @@ public class MenuManager : MonoBehaviour
         yield return PlayOpenCloseMenu();
     }
 
+    private void DestroyMenu()
+    {
+        IsMenuOpen = false;
+        foreach (var animate in leftAnimationList) Destroy(animate.transform.parent.gameObject);
+        foreach (var animate in rightAnimationList) Destroy(animate.transform.parent.gameObject);
+        leftAnimationList.Clear();
+        rightAnimationList.Clear();
+    }
+
     public void CreateMenuButtons()
     {
         IsCreateMenuOpen = true;
+        DestroyMenu();
         AddButton("닫기", CloseMenu);
-        if (SchedulerManager.IsRunScheduler)
+        if (SchedulerManager.IsSaveScheduler)
         {
             AddButton("행동 멈춤", StopMove);
         }
@@ -72,7 +82,6 @@ public class MenuManager : MonoBehaviour
         {
             AddButton("행동 시작", StartMove);
         }
-        // AddButton("모니터 선택", SetMonitor);
         AddButton("종료", Exit);
         StartCoroutine(PlayOpenCloseMenu());
     }
@@ -135,18 +144,14 @@ public class MenuManager : MonoBehaviour
 
         if (!IsMenuOpen)
         {
-            foreach (var animate in leftAnimationList) Destroy(animate.transform.parent.gameObject);
-            foreach (var animate in rightAnimationList) Destroy(animate.transform.parent.gameObject);
-            
-            leftAnimationList.Clear();
-            rightAnimationList.Clear();
-            menuGameObject.SetActive(false);
+            DestroyMenu();
         }
     }
 
     public void AddButton(string text, Func<IEnumerator> action)
     {
         var menu = Instantiate(menuButton, menuTransform).GetComponent<MenuButton>().SetButton(text, action);
+        // Debug.Log($"left : {leftAnimationList.Count} <= right : {rightAnimationList.Count}");
         
         if (leftAnimationList.Count <= rightAnimationList.Count)
         {
@@ -174,14 +179,16 @@ public class MenuManager : MonoBehaviour
     
     public IEnumerator StartMove()
     {
-        yield return PlayOpenCloseMenu();
         SchedulerManager.Instance.StartSchedule();
+        SchedulerManager.IsRunScheduler = true;
+        yield return PlayOpenCloseMenu();
     }
 
     public IEnumerator StopMove()
     {
-        yield return PlayOpenCloseMenu(); 
         SchedulerManager.Instance.StopSchedule();
+        SchedulerManager.IsRunScheduler = false;
+        yield return PlayOpenCloseMenu(); 
     }
 
     public IEnumerator SetMonitor()

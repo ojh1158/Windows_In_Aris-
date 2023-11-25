@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Script.Data;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class TransparentApp : MonoBehaviour
 {
@@ -77,27 +77,27 @@ public class TransparentApp : MonoBehaviour
         public int x;
         public int y;
     }
-    
+
+    [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+    private static extern bool SetWindowText(int hwnd, String lpString);
 
     void Awake()
     {
         API = this;
         if (Application.isEditor) return;
 #if UNITY_STANDALONE_WIN
+        // var windowsName = $"Aris {Random.Range(float.MinValue, float.MaxValue)}";
+        
         Screen.SetResolution(200,250,false);
         
-        hWnd = (int)FindWindow(null, "Aris");
-        
+        hWnd = (int)FindWindow(null, Application.productName);
+        SetWindowText(hWnd, $"Aris {Random.Range(float.MinValue, float.MaxValue)}");
         SetWindowLong(hWnd, GWL_EXSTYLE, WS_EX_LAYERED);
         SetLayeredWindowAttributes(hWnd, 0x000300, 255, LWA_ALPHA | LWA_COLORKEY);
         
         BringWindowToTop(hWnd);
         int style = GetWindowLong(hWnd, GWL_STYLE);
         SetWindowLong(hWnd, GWL_STYLE, (style & ~WS_BORDER & ~WS_CAPTION));
-        
-        // var pos = Screen.mainWindowDisplayInfo;
-        // Move(pos.width / 2, pos.height / 2);
-        
         
         int hMonitor = MonitorFromWindow(hWnd, 0);
         MONITORINFO monitorInfo = new MONITORINFO(); monitorInfo.cbSize = Marshal.SizeOf(typeof(MONITORINFO));
