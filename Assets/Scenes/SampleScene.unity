@@ -1707,7 +1707,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 1
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 1024
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -2128,8 +2128,6 @@ MonoBehaviour:
     - "\uC6A9\uC0AC\uC5EC. \uBE5B\uC774 \uB2F9\uC2E0\uACFC \uD568\uAED8\uD569\uB2C8\uB2E4."
     - "\uC624\uB298\uC740 \uC5B4\uB5A4 \uBAA8\uD5D8\uC744 \uB5A0\uB098\uC2E4 \uAC74\uAC00\uC694?
       \uC544\uB9AC\uC2A4\uB294 \uD568\uAED8 \uB5A0\uB0A0 \uC900\uBE44\uAC00 \uB418\uC5B4\uC788\uC2B5\uB2C8\uB2E4."
-    - "\uC5B4\uC11C \uC624\uC138\uC694, \uC120\uC0DD\uB2D8. \uC544\uB9AC\uC2A4, \uC120\uC0DD\uB2D8\uC744
-      \uAE30\uB2E4\uB9AC\uACE0 \uC788\uC5C8\uC2B5\uB2C8\uB2E4."
     - "\uC2E0\uC791 \uAC8C\uC784\uC774 \uACE7 \uBC1C\uB9E4\uB41C\uB300\uC694! \uC120\uC0DD\uB2D8\uB3C4
       \uAC19\uC774 \uD558\uC2E4 \uAC70\uC8E0?"
     - "\uC73C\uC74C, \uBC30\uAC00 \uACE0\uD515\uB2C8\uB2E4. \uC751\u2026? \uC544\uB9AC\uC2A4\uB294
@@ -2140,15 +2138,15 @@ MonoBehaviour:
     - "\uC774\uC720\uB294 \uBAA8\uB974\uACA0\uC9C0\uB9CC, \uC544\uB9AC\uC2A4\uB294
       \uB208\uBB3C\uC744 \uD758\uB9B4 \uC218 \uC788\uC2B5\uB2C8\uB2E4. \uC544\uB9C8
       \uC548\uAD6C\uD615 \uCE74\uBA54\uB77C \uC138\uCC99\uC6A9\uC77C \uAC81\uB2C8\uB2E4."
-    - "\uC120\uC0DD\uB2D8, \uB2E4\uC74C \uBAA9\uC801\uC9C0\uB294 \uC624\uB77D\uC2E4\u2026.
-      \uC544, \uC544\uB9AC\uC2A4\uB294 \uAC70\uC9D3\uB9D0 \uD558\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4!"
-  - dialogueType: 1
-    text:
     - "\uC544\uB9AC\uC2A4, \uD30C\uD2F0\uC5D0 \uD569\uB958\uD569\uB2C8\uB2E4."
     - "\uC81C \uC5ED\uD560\uC740, \uC5B4\uD0DC\uCEE4\uB85C\uAD70\uC694."
     - "\uAE30\uB3D9 \uC900\uBE44 \uC644\uB8CC."
     - "\uC804\uBC29\uC5D0 \uBAA9\uD45C \uD655\uC778. \uC804\uC9C4\uD558\uACA0\uC2B5\uB2C8\uB2E4."
     - "\uC120\uC0DD\uB2D8, \uC9C0\uC2DC\uB97C."
+  - dialogueType: 1
+    text:
+    - "\uB044\uC544\uC559 \uBAB8\uBAA8\uC774!! \uAF2C\uB9C8\uBA54\uC774\uB4DC\uB2D8!!
+      \uBBF8\uB3C4\uB9AC!! \uC720\uC988!!"
   - dialogueType: 2
     text:
     - "\uC544\uB9AC\uC2A4\uAC00 \uC5EC\uAE30 \uC788\uC2B5\uB2C8\uB2E4. \uC544\uB9AC\uC2A4\uAC00
@@ -2211,7 +2209,8 @@ MonoBehaviour:
     - "\uC774 \uC138\uC0C1\uC744 \uB354 \uBC30\uC6B0\uACE0 \uC2F6\uC2B5\uB2C8\uB2E4!"
   - dialogueType: 6
     text:
-    - 101110001101101110111011111....
+    - "\uC5B4\uC11C \uC624\uC138\uC694, \uC120\uC0DD\uB2D8. \uC544\uB9AC\uC2A4, \uC120\uC0DD\uB2D8\uC744
+      \uAE30\uB2E4\uB9AC\uACE0 \uC788\uC5C8\uC2B5\uB2C8\uB2E4."
 --- !u!4 &1878015757
 Transform:
   m_ObjectHideFlags: 0
@@ -2260,16 +2259,6 @@ MonoBehaviour:
   animator: {fileID: 1837110029}
   eyesClose: {fileID: 0}
   haloAnimation: {fileID: 361851900}
-  schedulerDataList:
-  - scheduleType: 0
-    maxTime: 0
-    minTime: 0
-  - scheduleType: 1
-    maxTime: 0
-    minTime: 0
-  - scheduleType: 2
-    maxTime: 0
-    minTime: 0
 --- !u!4 &2035148249
 Transform:
   m_ObjectHideFlags: 0

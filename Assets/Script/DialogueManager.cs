@@ -33,7 +33,7 @@ public class DialogueManager : MonoBehaviour
 
     private IEnumerator MemoReal()
     {
-        var memoReal = dialogueDataList.Find(data => data.dialogueType == DialogueType.Other);
+        var memoReal = dialogueDataList.Find(data => data.dialogueType == DialogueType.MemoReal);
         
         foreach (var text in memoReal.text)
         {

@@ -74,7 +74,7 @@ public class MenuManager : MonoBehaviour
         IsCreateMenuOpen = true;
         DestroyMenu();
         AddButton("닫기", CloseMenu);
-        if (SchedulerManager.IsSaveScheduler)
+        if (SchedulerManager.IsRunScheduler)
         {
             AddButton("행동 멈춤", StopMove);
         }
@@ -91,8 +91,8 @@ public class MenuManager : MonoBehaviour
         // Debug.Log(IsMenuOpen);
         if (!IsMenuOpen)
         {
-            IsMenuOpen = true;
             menuGameObject.SetActive(true);
+            IsMenuOpen = true;
             foreach (var anime in leftAnimationList)
             {
                 anime.clip = leftClip;

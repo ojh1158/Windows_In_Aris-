@@ -11,7 +11,7 @@ namespace Script.Data
         Other,
         Relation,
         MemoReal,
-        Anniversary
+        Welcome
     }
     [Serializable]
     public class DialogueData

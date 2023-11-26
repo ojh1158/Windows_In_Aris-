@@ -30,15 +30,13 @@ namespace Script.Data
     
     public class Schedule
     {
-        private List<SchedulerData> _schedulerDataList;
-        private List<DialogueData> _dialogueDataList;
+        private List<DialogueData> _dialogueIdleDataList;
 
         private List<(ScheduleType scheduleType, Func<IEnumerator> iEnumerator)> _scheduleList;
 
-        public void SetSchedulerData(List<SchedulerData> schedulerDataList)
+        public void SetSchedulerData()
         {
-            _schedulerDataList = schedulerDataList;
-            _dialogueDataList = DialogueManager.Instance.dialogueDataList.FindAll(data => data.dialogueType is DialogueType.Normal or DialogueType.PickUp);
+            _dialogueIdleDataList = DialogueManager.Instance.dialogueDataList.FindAll(data => data.dialogueType is DialogueType.Normal or DialogueType.Other);
         }
 
         public IEnumerator StartSchedule(ScheduleType scheduleType)
@@ -55,7 +53,7 @@ namespace Script.Data
         
         private IEnumerator Idle()
         {
-            var startRandomWithType = DialogueManager.Instance.StartRandomWithType(_dialogueDataList[Random.Range(0, _dialogueDataList.Count)].dialogueType);
+            var startRandomWithType = DialogueManager.Instance.StartRandomWithType(_dialogueIdleDataList[Random.Range(0, _dialogueIdleDataList.Count)].dialogueType);
             SchedulerManager.Instance.animator.Play("idle");
             yield return DialogueManager.Instance.StartCoroutine(startRandomWithType);
             var shouldPlayEyesClose = Random.Range(0, 2) == 0;
@@ -108,8 +106,10 @@ namespace Script.Data
 
         private IEnumerator Pick()
         {
-            SchedulerManager.Instance.animator.Play("Pick");
+            SchedulerManager.Instance.animator.Play("Pick"); 
+            DialogueManager.Instance.StartCoroutine(DialogueManager.Instance.StartRandomWithType(DialogueType.PickUp));
             yield return new WaitUntil(() => !MoveManager.IsPick);
+            DialogueManager.Instance.StopAllCoroutineAndIntoText();
         }
         
         private IEnumerator Fall()

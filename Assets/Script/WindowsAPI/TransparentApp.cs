@@ -125,8 +125,6 @@ public class TransparentApp : MonoBehaviour
     {
         if (GetWindowRect(hWnd, out var rect))
         {
-            // int width = Rect.Right - Rect.Left;
-            // int height = Rect.Bottom - Rect.Top;
             return (rect.Left, rect.Top);
         }
         throw new NullReferenceException();

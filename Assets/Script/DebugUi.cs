@@ -6,8 +6,6 @@ using UnityEngine;
 public class DebugUi : MonoBehaviour
 {
     public TMP_Text text;
-
-    public static string Debug;
     
     private void OnEnable()
     {
@@ -26,6 +24,11 @@ public class DebugUi : MonoBehaviour
         if (type == LogType.Error || type == LogType.Exception)
         {
             text.text += stackTrace + "\n";
+        }
+
+        if (text.text.Length >= 2000)
+        {
+            text.text = text.text[100..];
         }
     }
     

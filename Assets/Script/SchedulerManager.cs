@@ -20,22 +20,18 @@ public class SchedulerManager : MonoBehaviour
     public Animator eyesClose;
     public Animation haloAnimation;
     
-    [Header("Data")]
-    public List<SchedulerData> schedulerDataList;
-    
     private Coroutine _schedule;
     private Schedule schedule = new();
 
     private bool _isPick;
-    public static bool IsSaveScheduler;
-    public static bool IsRunScheduler;
+    public static bool IsSaveScheduler = true;
+    public static bool IsRunScheduler = true;
     
     private void Awake()
     {
         Instance = this;
-        schedule.SetSchedulerData(schedulerDataList);
-        _schedule = StartCoroutine(RunSchedule());
-        IsRunScheduler = true;
+        schedule.SetSchedulerData();
+        _schedule = StartCoroutine(RunSchedule(true));
     }
 
     public void StopSchedule()
@@ -52,7 +48,7 @@ public class SchedulerManager : MonoBehaviour
         StopCoroutine(_schedule);
         StopCoroutine(_runSchedule);
         DialogueManager.Instance.StopAllCoroutineAndIntoText();
-        _schedule = StartCoroutine(RunSchedule());
+        _schedule = StartCoroutine(RunSchedule(false));
         IsRunScheduler = true;
     }
     
@@ -91,8 +87,14 @@ public class SchedulerManager : MonoBehaviour
         ScheduleType.Walking
     };
 
-    private IEnumerator RunSchedule()
+    private IEnumerator RunSchedule(bool isFirst)
     {
+        if (isFirst)
+        {
+            yield return _runSchedule = StartCoroutine(DialogueManager.Instance.StartRandomWithType(DialogueType.Welcome));
+            yield return new WaitForSeconds(Random.Range(1f, 2f));
+        }
+        
         while (true)
         {
             // var scheduleType = (ScheduleType)Random.Range(0, Enum.GetValues(typeof(ScheduleType)).Length);
