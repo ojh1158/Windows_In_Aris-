@@ -15,6 +15,7 @@ public class MoveManager : MonoBehaviour
 
     public static bool IsGround;
     public static bool IsPick;
+    public static string NowDirection;
     private void Awake()
     {
         Instance = this;
@@ -22,9 +23,10 @@ public class MoveManager : MonoBehaviour
     
     private float _gravity = 2;
     private bool _isLeft;
+    private float _rigidSpeed = 0.65f;
     private Vector2 _rigidBodyPos;
     
-    private readonly Queue<(int x, int y)> _rigidBodyPosQueue = new(); 
+    private readonly Queue<(float x, float y)> _rigidBodyPosQueue = new(); 
 
     public void Update()
     {
@@ -52,16 +54,27 @@ public class MoveManager : MonoBehaviour
         
         if (!IsGround)
         {
-            _gravity += Time.deltaTime * 20;
-            var moveDelta = 100f * Time.deltaTime;
-            _rigidBodyPos.x = moveDelta >= 0.9f ? _rigidBodyPos.x : _rigidBodyPos.x * moveDelta;
-            _rigidBodyPos.y = moveDelta >= 0.9f ? _rigidBodyPos.y : _rigidBodyPos.y * moveDelta;
-            // Debug.Log($"{_rigidBodyPos} ||| Time : {moveDelta:F2}" );
+            _gravity += Time.deltaTime * 30;
+            // var moveDelta = 100f * Time.deltaTime;
+            // _rigidBodyPos.x = moveDelta >= 0.8f ? _rigidBodyPos.x : _rigidBodyPos.x * moveDelta;
+            // _rigidBodyPos.y = moveDelta >= 0.8f ? _rigidBodyPos.y : _rigidBodyPos.y * moveDelta;
             var rect = TransparentApp.GetLeftUpVector2();
+            _rigidSpeed = _rigidSpeed >= 0.999f ? 0.999f : _rigidSpeed + 15 * Time.deltaTime;
+            NowDirection = _rigidBodyPos.x > 0 ? "right" : "left";
+            _rigidBodyPos.x *= _rigidSpeed;
+            if (0 == (int)rect.y)
+            {
+                _rigidBodyPos.y = 0;
+                _gravity = 2;
+            }
+            else
+                _rigidBodyPos.y = _rigidBodyPos.y * _rigidSpeed;
+            // Debug.Log($"{_rigidBodyPos} ||| Time : {moveDelta:F2}" );
             TransparentApp.API.Move((int)rect.x - (int)_rigidBodyPos.x,(int)rect.y - (int)_rigidBodyPos.y + (int)_gravity);
         }
         else
         {
+            _rigidSpeed = 0.65f;
             _rigidBodyPosQueue.Clear();
             _gravity = 2;
         }
@@ -88,6 +101,11 @@ public class MoveManager : MonoBehaviour
         var x = _rigidBodyPosQueue.Sum(data => data.x) / _rigidBodyPosQueue.Count;
         var y = _rigidBodyPosQueue.Sum(data => data.y) / _rigidBodyPosQueue.Count;
 
+        x /= 5f * (Screen.mainWindowDisplayInfo.width / 1920f);
+        y /= 5f * (Screen.mainWindowDisplayInfo.height / 1080f);
+        
+        // Debug.Log(Screen.mainWindowDisplayInfo.width);
+        // Debug.Log((Screen.mainWindowDisplayInfo.width / 1920));
         return new Vector2(x, y);
     }
     

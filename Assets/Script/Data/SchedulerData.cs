@@ -115,7 +115,21 @@ namespace Script.Data
         private IEnumerator Fall()
         {
             SchedulerManager.Instance.animator.Play("Fall");
-            yield return new WaitUntil(() => MoveManager.IsGround);
+            MoveManager.Instance.SetRotate(MoveData.Find(data => data.type == MoveManager.NowDirection).rotateY);
+            while (true)
+            {
+                if (MoveManager.IsPick)
+                {
+                    SchedulerManager.Instance.StopSchedule();
+                    SchedulerManager.Instance.StartCoroutine(SchedulerManager.Instance.Pick());
+                    yield break;
+                }
+                if (MoveManager.IsGround)
+                {
+                    break;
+                }
+                yield return null;
+            }
         }
     }
 }
