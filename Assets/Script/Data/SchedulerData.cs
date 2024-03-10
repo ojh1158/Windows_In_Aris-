@@ -59,16 +59,15 @@ namespace Script.Data
             var shouldPlayEyesClose = Random.Range(0, 2) == 0;
             if (shouldPlayEyesClose)
             {
-                // DebugUi.Debug = "start";
                 SchedulerManager.Instance.animator.Play("EyesClose");
-                foreach (var animationClip in SchedulerManager.Instance.animator.runtimeAnimatorController.animationClips)
+                foreach (var animationClip in SchedulerManager.Instance.animator.runtimeAnimatorController
+                             .animationClips)
                 {
                     if (animationClip.name == "EyesClose")
                     {
                         yield return new WaitForSeconds(animationClip.length);
                     }
                 }
-                // DebugUi.Debug = "end";
             }
             yield return new WaitForSeconds(Random.Range(1f, 2f));
         }

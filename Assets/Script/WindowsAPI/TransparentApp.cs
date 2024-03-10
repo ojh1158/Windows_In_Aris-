@@ -92,7 +92,6 @@ public class TransparentApp : MonoBehaviour
         
         hWnd = (int)FindWindow(null, Application.productName);
         SetWindowText(hWnd, $"Aris {Random.Range(float.MinValue, float.MaxValue)}");
-        SetWindowLong(hWnd, GWL_EXSTYLE, WS_EX_LAYERED);
         SetLayeredWindowAttributes(hWnd, 0x000300, 255, LWA_ALPHA | LWA_COLORKEY);
         
         BringWindowToTop(hWnd);
