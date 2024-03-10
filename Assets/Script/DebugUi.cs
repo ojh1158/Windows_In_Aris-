@@ -17,11 +17,18 @@ public class DebugUi : MonoBehaviour
         Application.logMessageReceived -= HandleLog;
     }
 
+    private Coroutine _removeText;
+
     void HandleLog(string logString, string stackTrace, LogType type)
     {
+        if (_removeText != null)
+        {
+            StopCoroutine(_removeText);
+        }
+        
         text.text += logString + "\n";
-        // 선택적: 오류 및 경고의 경우 스택 추적도 표시
-        if (type == LogType.Error || type == LogType.Exception)
+        
+        if (type is LogType.Error or LogType.Exception)
         {
             text.text += stackTrace + "\n";
         }
@@ -30,6 +37,15 @@ public class DebugUi : MonoBehaviour
         {
             text.text = text.text[100..];
         }
+
+        _removeText = StartCoroutine(WaitRemoveText(10f));
+    }
+
+    private IEnumerator WaitRemoveText(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        text.text = "";
     }
     
     // void Update()

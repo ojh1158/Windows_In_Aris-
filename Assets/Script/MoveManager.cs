@@ -55,9 +55,6 @@ public class MoveManager : MonoBehaviour
         if (!IsGround)
         {
             _gravity += Time.deltaTime * 30;
-            // var moveDelta = 100f * Time.deltaTime;
-            // _rigidBodyPos.x = moveDelta >= 0.8f ? _rigidBodyPos.x : _rigidBodyPos.x * moveDelta;
-            // _rigidBodyPos.y = moveDelta >= 0.8f ? _rigidBodyPos.y : _rigidBodyPos.y * moveDelta;
             var rect = TransparentApp.GetLeftUpVector2();
             _rigidSpeed = _rigidSpeed >= 0.999f ? 0.999f : _rigidSpeed + 15 * Time.deltaTime;
             NowDirection = _rigidBodyPos.x > 0 ? "right" : "left";
@@ -97,15 +94,12 @@ public class MoveManager : MonoBehaviour
         if (_rigidBodyPosQueue.Count == 0)
             return default;
         
-        // Debug.Log(_rigidBodyPosQueue.Sum(data => data.x));
         var x = _rigidBodyPosQueue.Sum(data => data.x) / _rigidBodyPosQueue.Count;
         var y = _rigidBodyPosQueue.Sum(data => data.y) / _rigidBodyPosQueue.Count;
 
         x /= 5f * (Screen.mainWindowDisplayInfo.width / 1920f);
         y /= 5f * (Screen.mainWindowDisplayInfo.height / 1080f);
         
-        // Debug.Log(Screen.mainWindowDisplayInfo.width);
-        // Debug.Log((Screen.mainWindowDisplayInfo.width / 1920));
         return new Vector2(x, y);
     }
     
