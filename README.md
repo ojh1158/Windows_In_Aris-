@@ -2,11 +2,11 @@
 
 ## 갤러리
 
-![잡기](docs/images/Grip.mp4)
+<video src="docs/images/Grip.mp4" controls autoplay loop muted playsinline width="600">잡기 - 브라우저가 video 태그를 지원하지 않습니다. [영상 보기](docs/images/Grip.mp4)</video>
 
-![평상시](docs/images/Idle.mp4)
+<video src="docs/images/Idle.mp4" controls autoplay loop muted playsinline width="600">평상시 - 브라우저가 video 태그를 지원하지 않습니다. [영상 보기](docs/images/Idle.mp4)</video>
 
-![던지기](docs/images/throw.mp4)
+<video src="docs/images/throw.mp4" controls autoplay loop muted playsinline width="600">던지기 - 브라우저가 video 태그를 지원하지 않습니다. [영상 보기](docs/images/throw.mp4)</video>
 
 
 ## 주요 기능
