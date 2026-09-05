@@ -86,24 +86,35 @@ public class TransparentApp : MonoBehaviour
         API = this;
         if (Application.isEditor) return;
 #if UNITY_STANDALONE_WIN
-        // var windowsName = $"Aris {Random.Range(float.MinValue, float.MaxValue)}";
-        
-        Screen.SetResolution(200,250,false);
-        
-        hWnd = (int)FindWindow(null, Application.productName);
+        StartCoroutine(ApplyTransparentRoutine());
+#endif
+    }
+
+    private IEnumerator ApplyTransparentRoutine()
+    {
+        // 윈도우가 완전히 생성되고 해상도가 설정될 때까지 기다림
+        yield return new WaitForSeconds(0.5f);
+
+        Screen.SetResolution(200, 250, false);
+        yield return new WaitForSeconds(0.1f);
+
+        hWnd = GetActiveWindow();
+        if (hWnd == 0) hWnd = (int)FindWindow(null, Application.productName);
+
         SetWindowText(hWnd, $"Aris {Random.Range(float.MinValue, float.MaxValue)}");
-        SetLayeredWindowAttributes(hWnd, 0x000300, 255, LWA_ALPHA | LWA_COLORKEY);
         
+        // 확장 스타일 먼저 설정 (WS_EX_LAYERED 추가 확인)
+        int exStyle = GetWindowLong(hWnd, GWL_EXSTYLE);
+        SetWindowLong(hWnd, GWL_EXSTYLE, exStyle | WS_EX_LAYERED);
+
+        // 투명도 설정 적용
+        SetLayeredWindowAttributes(hWnd, 0x000300, 255, LWA_ALPHA | LWA_COLORKEY);
+    
         BringWindowToTop(hWnd);
         int style = GetWindowLong(hWnd, GWL_STYLE);
         SetWindowLong(hWnd, GWL_STYLE, (style & ~WS_BORDER & ~WS_CAPTION));
-        
-        int hMonitor = MonitorFromWindow(hWnd, 0);
-        MONITORINFO monitorInfo = new MONITORINFO(); monitorInfo.cbSize = Marshal.SizeOf(typeof(MONITORINFO));
-        GetMonitorInfo(hMonitor, ref monitorInfo);
-
+    
         MoveWindowToBottomRight();
-#endif
     }
     
     
