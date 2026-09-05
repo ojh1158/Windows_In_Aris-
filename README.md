@@ -1,13 +1,15 @@
-# Aris - Windows 데스크톱 메스코트
+# Aris - Windows
 
 ## 갤러리
 
-<video src="docs/images/Grip.mp4" controls autoplay loop muted playsinline width="600">잡기 - 브라우저가 video 태그를 지원하지 않습니다. [영상 보기](docs/images/Grip.mp4)</video>
+### 잡기
+![잡기](docs/images/Grip.gif)
 
-<video src="docs/images/Idle.mp4" controls autoplay loop muted playsinline width="600">평상시 - 브라우저가 video 태그를 지원하지 않습니다. [영상 보기](docs/images/Idle.mp4)</video>
+### 평상시
+![평상시](docs/images/Idle.gif)
 
-<video src="docs/images/throw.mp4" controls autoplay loop muted playsinline width="600">던지기 - 브라우저가 video 태그를 지원하지 않습니다. [영상 보기](docs/images/throw.mp4)</video>
-
+### 던지기
+![던지기](docs/images/throw.gif)
 
 ## 주요 기능
 
